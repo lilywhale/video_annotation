@@ -128,18 +128,16 @@
 <!-- End of Client Section -->	
 
 <!-- Reservation Section -->
-<section id="reservation" class="bg-white section-content">
-    <div class="video-container">
-        <video id="myVideo" controls>
-            <source src="{{ url_for('static', filename='img/video.mp4') }}" type="video/mp4">
-            Your browser does not support the video tag.
-        </video>
-        <div class="controls">
-            <button id="playPauseBtn">&#9658;</button>
-        </div>
-    </div>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<section id="reservation" class="bg-white section-content">
+  <div class="video-container">
+      <video id="myVideo" width='460' height='820' controls>
+          <source src="{{ url_for('static', filename='video/' + video_name) }}" type="video/mp4">
+          You need to upload a video or your browser does not support the video tag.
+      </video>
+      
+  </div>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 
   </section>
 

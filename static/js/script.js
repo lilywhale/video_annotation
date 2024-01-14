@@ -29,3 +29,20 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     });
 });
+
+document.addEventListener('DOMContentLoaded', function () {
+    var video = document.getElementById('myVideo');
+    var playPauseBtn = document.getElementById('playPauseBtn');
+
+    playPauseBtn.addEventListener('click', function () {
+        if (video.paused || video.ended) {
+            video.play();
+            playPauseBtn.innerHTML = '&#10074;&#10074;'; // Pause symbol
+        } else {
+            video.pause();
+            playPauseBtn.innerHTML = '&#9658;'; // Play symbol
+        }
+    });
+
+    // Additional controls can be added based on your requirements
+});

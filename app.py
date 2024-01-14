@@ -1,13 +1,14 @@
-from flask import Flask, render_template, request, session, redirect, url_for
+from flask import Flask, render_template, request, session, redirect, url_for,send_file
 import requests
 import mysql.connector
 import secrets
 import random
 
-
 app = Flask(__name__)
 app.static_folder = 'static'
 app.secret_key = secrets.token_hex(16)  # Generate a 32-character secret key
+
+ALLOWED_EXTENSIONS = ['mp4']
 
 """
 app.config['MYSQL_HOST'] = 'database-1.cczbiwiljwho.eu-north-1.rds.amazonaws.com'    # Replace with your MySQL server host
@@ -95,7 +96,7 @@ def login():
         # Redirect to the user's dashboard or perform other actions
         return redirect(url_for('planning'))
     else:
-        # User does not exist or invalid credentials, redirect to an error page or perform other actions
+        # User does not exist or invalid credentials
         return render_template('Connexion.html')
 
 
@@ -104,15 +105,37 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/myvideos.html')
-def myvideos():
-    return render_template('MyVideos.html')
-
-
 @app.route('/annotation.html')
 def annotation():
     return render_template('NewAnnotation.html')
 
+
+@app.route('/newvideo.html')
+def newvideo():
+    return render_template('New_video.html')
+
+
+def allowed_file(filename):
+    return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
+
+
+@app.route('/upload_video', methods=['POST'])
+def upload_video():
+    if 'video' not in request.files:
+        return "No video file found"
+    video = request.files['video']
+    if video.filename == "":
+        return 'No video file selected'
+    if video and allowed_file(video.filename):
+        video.save('static/video/' + video.filename)
+        return render_template('NewAnnotation.html', video_name = video.filename)
+    return "invalid video"
+
+
+@app.route('/stream_video')
+def stream_video():
+    video_path = 'static/video/temp_video.mp4'
+    return send_file(video_path, mimetype='video/mp4', as_attachment=True)
 
 if __name__ == '__main__':
     app.run()
