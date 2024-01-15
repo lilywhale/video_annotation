@@ -9,6 +9,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <!-- External CSS -->
+<!-- External CSS -->
 <link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/bootstrap.min.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='vendor/owlcarousel/owl.carousel.min.css') }}">
@@ -26,8 +27,11 @@
 <!-- Modernizr JS for IE8 support of HTML5 elements and media queries -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
 
-<!-- CSS -->
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/bootstrap.min.css') }}">
+<!-- Bootstrap JS and Popper.js (required for dropdowns) -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6pD6Vd8hTQEmQ8dA2gFFmLHAyJL+g2N4Npb" crossorigin="anonymous"></script>
+
 
 <!-- Custom CSS -->
 <style>
@@ -50,13 +54,46 @@
     width: 100%;
   }
   @media (min-width: 768px) {
-  .col-md-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
+    .col-md-6 {
+      flex: 0 0 50%;
+      max-width: 50%;
+    }
   }
-}
-</style>
+  body {
+      font-family: Arial, sans-serif;
+      background-color: #f8f9fa;
+      margin: 20px;
+  }
 
+  table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      border-radius: 10px;
+      overflow: hidden;
+      background-color: white;
+  }
+
+  th, td {
+      padding: 15px;
+      text-align: left;
+  }
+
+  th {
+      background-color: #343a40;
+      color: white;
+  }
+
+  td {
+      border-top: 1px solid #dee2e6;
+  }
+
+  input[type="checkbox"] {
+      margin: 0;
+  }
+
+  
+</style>
 
 </head>
 <body data-spy="scroll" data-target="#navbar" class="static-layout">
@@ -135,6 +172,41 @@
   </form>
 </div>
 
+<h2>Liste des vidéos</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Miniature</th>
+                <th>Nom du fichier</th>
+                <th>Durée</th>
+                <th>FPS</th>
+                <th>Résolution</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for video in video_info %}
+                <tr>
+                    <td><img src="{{ url_for('static', filename='thumbnails/' + video.thumbnail) }}" alt="Thumbnail" width="140" height="65"></td>
+                    <td>{{ video.file_name }}</td>
+                    <td>{{ video.duration }} </td>
+                    <td>{{ video.fps }} FPS</td>
+                    <td>{{ video.size[0] }}x{{ video.size[1] }}</td>
+                    <td>
+                      <div class="dropdown">
+                          <button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <!-- Three dots icon or any other icon you prefer -->
+                              &#8285;
+                          </button>
+                          <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                              <a class="dropdown-item" href="{{ url_for('delete_video', video_name=video.file_name) }}">Delete</a>
+                              <a class="dropdown-item" href="{{ url_for('annotate_video', video_name=video.file_name) }}">Annotate</a>
+                          </div>
+                      </div>
+                    </td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 
 <!-- JavaScript -->
 <script src="{{ url_for('static', filename='vendor/bootstrap/bootstrap.min.js') }}"></script>

@@ -1,0 +1,6 @@
+requests
+mysql.connector
+secrets
+random
+os
+moviepy

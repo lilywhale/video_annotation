@@ -3,6 +3,13 @@ import requests
 import mysql.connector
 import secrets
 import random
+import os
+from moviepy.editor import VideoFileClip
+import base64
+from io import BytesIO
+from PIL import Image
+from werkzeug.utils import secure_filename
+
 
 app = Flask(__name__)
 app.static_folder = 'static'
@@ -110,10 +117,41 @@ def annotation():
     return render_template('NewAnnotation.html')
 
 
-@app.route('/newvideo.html')
-def newvideo():
-    return render_template('New_video.html')
+@app.route('/myvideos.html')
+def myvideos(): 
+    # Liste les fichiers dans le dossier
+    video_files = [f for f in os.listdir("./static/video") if os.path.isfile(os.path.join("./static/video", f))]
+    print(video_files)
+    video_info = []
 
+    for video_file in video_files:
+        video_path = os.path.join("./static/video", video_file)
+        print(video_path)
+        clip = VideoFileClip(video_path)
+        duration = round(round(clip.duration, 0) / 60, 2)
+        fps = clip.fps
+        size = clip.size
+        thumbnail_path = get_video_thumbnail(video_path)
+        thumbnail_path = thumbnail_path.split("\\")[1]
+
+        video_info.append({
+            'file_name': video_file,
+            'duration': duration,
+            'fps': fps,
+            'size': size,
+            'thumbnail': thumbnail_path,
+        })
+        print("video info :")
+        print(video_info)
+    return render_template('My_Videos.html', video_info=video_info)
+
+def get_video_thumbnail(video_path):
+    clip = VideoFileClip(video_path)
+    frame = clip.get_frame(15)
+    thumbnail = Image.fromarray(frame)
+    thumbnail_path = os.path.join('static/thumbnails', os.path.basename(video_path).rsplit('.', 1)[0] + '.png')
+    thumbnail.save(thumbnail_path)
+    return thumbnail_path
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
@@ -127,8 +165,9 @@ def upload_video():
     if video.filename == "":
         return 'No video file selected'
     if video and allowed_file(video.filename):
-        video.save('static/video/' + video.filename)
-        return render_template('NewAnnotation.html', video_name = video.filename)
+        filename = secure_filename(video.filename.replace(" ", "_"))
+        video.save('static/video/' + filename)
+        return render_template('NewAnnotation.html', video_name=filename)
     return "invalid video"
 
 
@@ -136,6 +175,25 @@ def upload_video():
 def stream_video():
     video_path = 'static/video/temp_video.mp4'
     return send_file(video_path, mimetype='video/mp4', as_attachment=True)
+
+
+@app.route('/delete_video/<video_name>')
+def delete_video(video_name):
+    video_path = os.path.join("static/video", video_name)
+    thumbnail_path = os.path.join("static/thumbnails", video_name.replace('.mp4', '.png'))
+
+    try:
+        os.remove(video_path)
+        os.remove(thumbnail_path)
+        return "Video and thumbnail deleted successfully."
+    except Exception as e:
+        return f"Error deleting video: {str(e)}"
+
+
+@app.route('/annotate_video/<video_name>')
+def annotate_video(video_name):
+    return render_template('NewAnnotation.html', video_name=video_name)
+
 
 if __name__ == '__main__':
     app.run()
