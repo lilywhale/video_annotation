@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for,send_file
 import requests
-import mysql.connector
+#import mysql.connector
 import secrets
 import random
 import os
@@ -9,6 +9,8 @@ import base64
 from io import BytesIO
 from PIL import Image
 from werkzeug.utils import secure_filename
+import pandas as pd
+
 
 
 app = Flask(__name__)
@@ -16,6 +18,7 @@ app.static_folder = 'static'
 app.secret_key = secrets.token_hex(16)  # Generate a 32-character secret key
 
 ALLOWED_EXTENSIONS = ['mp4']
+df_annotation = pd.DataFrame(columns = ["playerName", "scoreAfter", "startTime", "endTime", "incomingShot", "incomingType", "outgoingType", "outgoingShot", "pointFinish", "position"] )
 
 """
 app.config['MYSQL_HOST'] = 'database-1.cczbiwiljwho.eu-north-1.rds.amazonaws.com'    # Replace with your MySQL server host
@@ -194,6 +197,40 @@ def delete_video(video_name):
 def annotate_video(video_name):
     return render_template('NewAnnotation.html', video_name=video_name)
 
+@app.route('/submit_annotation', methods=['POST'])
+def submit_annotation():
+    # Récupération des données du formulaire
+    player_name = request.form['playerName']
+    score_after = request.form['scoreAfter']
+    start_time = request.form['startTime']
+    end_time = request.form['endTime']
+    incoming_shot = request.form['incomingShot']
+    incoming_type = request.form['incomingType']
+    outgoing_type = request.form['outgoingType']
+    outgoing_shot = request.form['outgoingShot']
+    point_finish = request.form['pointFinish']
+    position = request.form['position']
+
+    # Traiter ou stocker les données ici
+    newrow = {
+        "playerName": player_name,
+        "scoreAfter": score_after,
+        "startTime": start_time,
+        "endTime" : end_time,
+        "incomingShot" : incoming_shot,
+        "incomingType" : incoming_type,
+        "outgoingType" : outgoing_type,
+        "outgoingShot" : outgoing_shot,
+        "pointFinish" : point_finish,
+        "position" : position
+    }
+
+    df_annotation = pd.concat([df_annotation, pd.DataFrame([newrow])], axis=0, ignore_index = True)
+    print(df_annotation)
+
+    session["Annotations"] = df_annotation
+    
+    return 'Annotation enregistrée'
 
 if __name__ == '__main__':
     app.run()
