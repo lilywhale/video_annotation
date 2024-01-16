@@ -211,6 +211,7 @@ def submit_annotation():
     point_finish = request.form['pointFinish']
     position = request.form['position']
 
+    global df_annotation
     # Traiter ou stocker les données ici
     newrow = {
         "playerName": player_name,
@@ -228,7 +229,7 @@ def submit_annotation():
     df_annotation = pd.concat([df_annotation, pd.DataFrame([newrow])], axis=0, ignore_index = True)
     print(df_annotation)
 
-    session["Annotations"] = df_annotation
+    session["Annotations"] = df_annotation.to_json()
     
     return 'Annotation enregistrée'
 
