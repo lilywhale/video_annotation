@@ -199,6 +199,9 @@ def annotate_video(video_name):
 
 @app.route('/submit_annotation', methods=['POST'])
 def submit_annotation():
+
+    global df_annotation
+
     # Récupération des données du formulaire
     player_name = request.form['playerName']
     score_after = request.form['scoreAfter']
@@ -211,7 +214,6 @@ def submit_annotation():
     point_finish = request.form['pointFinish']
     position = request.form['position']
 
-    global df_annotation
     # Traiter ou stocker les données ici
     newrow = {
         "playerName": player_name,
@@ -226,7 +228,7 @@ def submit_annotation():
         "position" : position
     }
 
-    df_annotation = pd.concat([df_annotation, pd.DataFrame([newrow])], axis=0, ignore_index = True)
+    df_annotation = pd.concat([df_annotation, pd.DataFrame([newrow])], axis=0, ignore_index=True)
     print(df_annotation)
 
     session["Annotations"] = df_annotation.to_json()
