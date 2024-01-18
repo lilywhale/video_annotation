@@ -60,7 +60,7 @@
 
 </head>
 <body data-spy="scroll" data-target="#navbar" class="static-layout">
-	<nav id="header-navbar" class="navbar navbar-expand-lg py-4">
+  <nav id="header-navbar" class="navbar navbar-expand-lg py-4">
         <div class="container">
             <a class="navbar-brand d-flex align-items-center text-white" href="index.html">
                 <!--<img src="{{ url_for('static', filename='img/TennisInsight.png') }}" alt="Tennis Insight Logo" height="40">-->
@@ -81,35 +81,35 @@
     </nav>
 
 <div id="side-nav" class="sidenav">
-	<a href="javascript:void(0)" id="side-nav-close">&times;</a>
-	
-	<div class="sidenav-content">
-		<p>
-			32 Avenue de la Republique, 94800 Villejuif
-		</p>
-		<p>
-			<span class="fs-16 primary-color">(+33) 120034509</span>
-		</p>
-		<p>Masterproject@efrei.net</p>
-	</div>
+  <a href="javascript:void(0)" id="side-nav-close">&times;</a>
+  
+  <div class="sidenav-content">
+    <p>
+      32 Avenue de la Republique, 94800 Villejuif
+    </p>
+    <p>
+      <span class="fs-16 primary-color">(+33) 120034509</span>
+    </p>
+    <p>Masterproject@efrei.net</p>
+  </div>
 </div><div id="side-search" class="sidenav">
-	<a href="javascript:void(0)" id="side-search-close">&times;</a>
-	<div class="sidenav-content">
-		<form action="">
+  <a href="javascript:void(0)" id="side-search-close">&times;</a>
+  <div class="sidenav-content">
+    <form action="">
 
-			<div class="input-group md-form form-sm form-2 pl-0">
-			  <input class="form-control my-0 py-1 red-border" type="text" placeholder="Search" aria-label="Search">
-			  <div class="input-group-append">
-			    <button class="input-group-text red lighten-3" id="basic-text1">
-			    	<span class="lnr lnr-magnifier"></span>
-			    </button>
-			  </div>
-			</div>
+      <div class="input-group md-form form-sm form-2 pl-0">
+        <input class="form-control my-0 py-1 red-border" type="text" placeholder="Search" aria-label="Search">
+        <div class="input-group-append">
+          <button class="input-group-text red lighten-3" id="basic-text1">
+            <span class="lnr lnr-magnifier"></span>
+          </button>
+        </div>
+      </div>
 
-		</form>
-	</div>
-	
-</div>	
+    </form>
+  </div>
+  
+</div>  
 
 <div class="jumbotron d-flex align-items-center">
   <div class="container text-center">
@@ -123,9 +123,9 @@
   <div class="circle-2"></div>
   <div class="circle-3"></div>
   
-</div>	<!-- Features Section-->
+</div>  <!-- Features Section-->
 
-<!-- End of Client Section -->	
+<!-- End of Client Section -->  
 
 <!-- Reservation Section -->
 
@@ -216,36 +216,37 @@
 <footer class="mastfoot my-3">
     <div class="inner container">
          <div class="row">
-         	<div class="col-lg-4 col-md-12 d-flex align-items-center">
-         		
-         	</div>
-         	<div class="col-lg-4 col-md-12 d-flex align-items-center">
-         		<p class="mx-auto text-center mb-0">&copy; 2023 EFREI Paris</p>
-         	</div>
+          <div class="col-lg-4 col-md-12 d-flex align-items-center">
+            
+          </div>
+          <div class="col-lg-4 col-md-12 d-flex align-items-center">
+            <p class="mx-auto text-center mb-0">&copy; 2023 EFREI Paris</p>
+          </div>
            
             <div class="col-lg-4 col-md-12">
-            	<nav class="nav nav-mastfoot justify-content-center">
-	                <a class="nav-link" href="https://www.facebook.com/">
-	                	<i class="fab fa-facebook-f"></i>
-	                </a>
-	                <a class="nav-link" href="https://twitter.com/">
-	                	<i class="fab fa-twitter"></i>
-	                </a>
-	                <a class="nav-link" href="https://www.instagram.com/">
-	                	<i class="fab fa-instagram"></i>
-	                </a>
-	                <a class="nav-link" href="https://fr.linkedin.com/">
-	                	<i class="fab fa-linkedin"></i>
-	                </a>
-	                <a class="nav-link" href="https://www.youtube.com/">
-	                	<i class="fab fa-youtube"></i>
-	                </a>
-	            </nav>
+              <nav class="nav nav-mastfoot justify-content-center">
+                  <a class="nav-link" href="https://www.facebook.com/">
+                    <i class="fab fa-facebook-f"></i>
+                  </a>
+                  <a class="nav-link" href="https://twitter.com/">
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                  <a class="nav-link" href="https://www.instagram.com/">
+                    <i class="fab fa-instagram"></i>
+                  </a>
+                  <a class="nav-link" href="https://fr.linkedin.com/">
+                    <i class="fab fa-linkedin"></i>
+                  </a>
+                  <a class="nav-link" href="https://www.youtube.com/">
+                    <i class="fab fa-youtube"></i>
+                  </a>
+              </nav>
             </div>
             
         </div>
     </div>
-</footer>	
+</footer> 
+
 <!-- External JS -->
 
 <script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
@@ -267,5 +268,39 @@
 
 <script src="{{ url_for('static', filename='js/app.min.js') }}"></script>
 <script src="//localhost:35729/livereload.js"></script>
+
+
+<!-- Modifications JS -->
+<!--  -->
+<!-- Boîte de dialogie après click sur le bouton soumettre -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+  document.addEventListener('DOMContentLoaded', function () {
+      // Sélectionner le formulaire
+      var annotationForm = document.querySelector('form[action="/submit_annotation"]');
+
+      // Ajouter un gestionnaire d'événements au formulaire
+      annotationForm.addEventListener('submit', function (event) {
+          // Empêchez l'envoi du formulaire par défaut
+          event.preventDefault();
+
+          // Utiliser SweetAlert pour afficher un message
+          Swal.fire({
+              title: 'Annotation enregistrée',
+              icon: 'success',
+              showConfirmButton: false,
+              timer: 2000  // Temps d'affichage en millisecondes (2 secondes)
+          }).then(function () {
+              // Réinitialiser le formulaire après la fermeture de SweetAlert
+              annotationForm.reset();
+          });
+      });
+  });
+</script>
+
+
+
+
 </body>
 </html>
+

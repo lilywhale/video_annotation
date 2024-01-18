@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, session, redirect, url_for,send_file
 import requests
-#import mysql.connector
+# import mysql.connector
 import secrets
 import random
 import os
@@ -85,7 +85,7 @@ def login():
     # Retrieve form data
     email = request.form.get('email')
     password = request.form.get('password')
-   
+
     # Connect to the database
     cnx = mysql.connector.connect(host=app.config['MYSQL_HOST'], user=app.config['MYSQL_USER'], password=app.config['MYSQL_PASSWORD'], database=app.config['MYSQL_DB'])
     cursor = cnx.cursor()
@@ -108,6 +108,7 @@ def login():
     else:
         # User does not exist or invalid credentials
         return render_template('Connexion.html')
+
 
 
 @app.route('/index.html')
@@ -135,8 +136,7 @@ def myvideos():
         fps = clip.fps
         size = clip.size
         thumbnail_path = get_video_thumbnail(video_path)
-        thumbnail_path = thumbnail_path.split("\\")[1]
-
+        thumbnail_path = thumbnail_path.split("/")[1]
         video_info.append({
             'file_name': video_file,
             'duration': duration,
@@ -170,7 +170,7 @@ def upload_video():
     if video and allowed_file(video.filename):
         filename = secure_filename(video.filename.replace(" ", "_"))
         video.save('static/video/' + filename)
-        return render_template('NewAnnotation.html', video_name=filename)
+        return render_template('NewAnnotation.html', video_name=filename) 
     return "invalid video"
 
 
@@ -239,4 +239,3 @@ if __name__ == '__main__':
     app.run()
 
 
-#Omg
