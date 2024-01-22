@@ -113,11 +113,11 @@ button#slider-start-prev:active, button#slider-end-prev:active {
 .controls .info div, h5 {
   margin: .5em 0;
 }
-/* .js-irs-0 { */
+/* .js-irs-0 { 
   flex-grow: 1;
   flex-basis:100%;
   margin:0 20px;
-}
+}*/
 .irs--round .irs-min, .irs--round .irs-max {
   color: #888;
 }
