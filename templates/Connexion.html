@@ -2,133 +2,87 @@
 <html lang="en">
 
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <title>TennisInsight.com</title>
-    <meta name="description" content="Roxy">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>TennisInsight.com</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
+  <style>
+      body {
+          font-family: 'Arial', sans-serif;
+          background-color: #ffffff;
+          margin: 0;
+          padding: 0;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          height: 100vh;
+      }
 
-    <!-- External CSS -->
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/bootstrap.min.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/select2/select2.min.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/owlcarousel/owl.carousel.min.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/lightcase/lightcase.css') }}">
-<link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+      .container {
+          background-color: rgba(141, 141, 141, 0.397);
+          padding: 30px;
+          border-radius: 10px;
+          box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+          width: 350px; /* Increased width for better spacing */
+          margin: 0 10px;
+          text-align: center;
+      }
 
-<!-- Fonts -->
-<link href="https://fonts.googleapis.com/css?family=Lato:300,400|Work+Sans:300,400,700" rel="stylesheet">
+      h1 {
+          margin-bottom: 30px;
+      }
 
-<!-- CSS -->
-<link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
-<link rel="stylesheet" href="https://cdn.linearicons.com/free/1.0.0/icon-font.min.css">
-<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+      input {
+          width: 100%;
+          padding: 10px;
+          margin-bottom: 15px;
+          border: none;
+          border-radius: 5px;
+          text-align: center; /* Center text within input */
+      }
 
-<!-- Modernizr JS for IE8 support of HTML5 elements and media queries -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.js"></script>
+      .btn {
+          background-color: #ffffff;
+          color: #1e7e34;
+          padding: 10px 20px;
+          border: none;
+          border-radius: 5px;
+          cursor: pointer;
+          font-weight: bold;
+      }
 
-<!-- CSS -->
-<link rel="stylesheet" href="{{ url_for('static', filename='vendor/bootstrap/bootstrap.min.css') }}">
-
-<!-- Custom CSS -->
-<style>
-
-  .card {
-    max-width: 400px;
-    margin: 0 auto;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-  }
-
-  .card-body {
-    padding: 2rem;
-  }
-
-  .form-group label {
-    font-weight: bold;
-  }
-
-  .btn-primary {
-    width: 100%;
-  }
-  @media (min-width: 768px) {
-  .col-md-6 {
-    flex: 0 0 50%;
-    max-width: 50%;
-  }
-}
-</style>
-
-
+      .btn:hover {
+          background-color: #3a99f1;
+      }
+  </style>
 </head>
-<body data-spy="scroll" data-target="#navbar" class="static-layout">
-	<nav id="header-navbar" class="navbar navbar-expand-lg py-4">
-        <div class="container">
-            <a class="navbar-brand d-flex align-items-center text-white" href="index.html">
-                <!--<img src="{{ url_for('static', filename='img/TennisInsight.png') }}" alt="Tennis Insight Logo" height="40">-->
-                <h3 class="font-weight-bolder mb-0 ml-2">Tennis Insight</h3>
-            </a>
-            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar-nav-header" aria-controls="navbar-nav-header" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="lnr lnr-menu"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbar-nav-header">
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html">Home</a>
-                    </li>
-                    <!-- Add more navbar items as needed -->
-                </ul>
-            </div>
-        </div>
-    </nav>
-
-<div id="side-nav" class="sidenav">
-	<a href="javascript:void(0)" id="side-nav-close">&times;</a>
-	
-	<div class="sidenav-content">
-		<p>
-			32 Avenue de la Republique, 94800 Villejuif
-		</p>
-		<p>
-			<span class="fs-16 primary-color">(+33) 120034509</span>
-		</p>
-		<p>Masterproject@efrei.net</p>
-	</div>
-</div><div id="side-search" class="sidenav">
-	<a href="javascript:void(0)" id="side-search-close">&times;</a>
-	<div class="sidenav-content">
-		<form action="">
-
-			<div class="input-group md-form form-sm form-2 pl-0">
-			  <input class="form-control my-0 py-1 red-border" type="text" placeholder="Search" aria-label="Search">
-			  <div class="input-group-append">
-			    <button class="input-group-text red lighten-3" id="basic-text1">
-			    	<span class="lnr lnr-magnifier"></span>
-			    </button>
-			  </div>
-			</div>
-
-		</form>
-	</div>
-	
-</div>	
-
-<div class="jumbotron d-flex align-items-center">
-  <div class="container text-center">
-    <h1 class="display-1 mb-4"><img src="{{ url_for('static', filename='img/TennisInsight.png') }}" alt="Tennis Insight Logo" height="160"></h1>
+<body>
+  <div class="container">
+      <h1>Sign In</h1>
+      <form method="POST" action="{{ url_for('login') }}">
+          <input type="email" class="form-control" placeholder="Email" name="email" required>
+          <br>
+          <input type="password" class="form-control" placeholder="Password" name="password" required>
+          <br>
+          <button type="submit" class="btn btn-primary">Login</button>
+      </form>
   </div>
-  <div class="rectangle-1"></div>
-  <div class="rectangle-2"></div>
-  <div class="rectangle-transparent-1"></div>
-  <div class="rectangle-transparent-2"></div>
-  <div class="circle-1"></div>
-  <div class="circle-2"></div>
-  <div class="circle-3"></div>
-  
-</div>	<!-- Features Section-->
 
-<!-- End of Client Section -->	
+  <div class="container">
+      <h1>Sign up</h1>
+      <form method="POST" action="{{ url_for('create_account') }}">
+          <input type="text" class="form-control" placeholder="Full Name" name="name" required>
+          <br>
+          <input type="email" class="form-control" placeholder="Email" name="email" required>
+          <br>
+          <input type="password" class="form-control" placeholder="Password" name="password" required>
+          <br>
+          <button type="submit" class="btn btn-primary">Create Account</button>
+      </form>
+  </div>
 
-<!-- Reservation Section -->
-<section id="reservation" class="bg-white section-content">
+<!--<section id="reservation" class="bg-white section-content">
     <div class="container">
         <div class="row justify-content-center">
           <div class="col-lg-6">
@@ -151,6 +105,7 @@
               </div>
             </div>
           </div>
+
        
           <div class="col-lg-6">
             <div class="card">
@@ -179,64 +134,13 @@
         </div>
       </div>
   </section>
+ -->
 
-<!-- JavaScript -->
-<script src="{{ url_for('static', filename='vendor/bootstrap/bootstrap.min.js') }}"></script>
-
-<!-- End of Features Section--></div>
-<footer class="mastfoot my-3">
-    <div class="inner container">
-         <div class="row">
-         	<div class="col-lg-4 col-md-12 d-flex align-items-center">
-         		
-         	</div>
-         	<div class="col-lg-4 col-md-12 d-flex align-items-center">
-         		<p class="mx-auto text-center mb-0">&copy; 2023 EFREI Paris</p>
-         	</div>
-           
-            <div class="col-lg-4 col-md-12">
-            	<nav class="nav nav-mastfoot justify-content-center">
-	                <a class="nav-link" href="https://www.facebook.com/">
-	                	<i class="fab fa-facebook-f"></i>
-	                </a>
-	                <a class="nav-link" href="https://twitter.com/">
-	                	<i class="fab fa-twitter"></i>
-	                </a>
-	                <a class="nav-link" href="https://www.instagram.com/">
-	                	<i class="fab fa-instagram"></i>
-	                </a>
-	                <a class="nav-link" href="https://fr.linkedin.com/">
-	                	<i class="fab fa-linkedin"></i>
-	                </a>
-	                <a class="nav-link" href="https://www.youtube.com/">
-	                	<i class="fab fa-youtube"></i>
-	                </a>
-	            </nav>
-            </div>
-            
-        </div>
-    </div>
-</footer>	
 <!-- External JS -->
 
-<script src="{{ url_for('static', filename='js/jquery.js') }}"></script>
-<script src="{{ url_for('static', filename='vendor/bootstrap/popper.min.js') }}"></script>
-<script src="{{ url_for('static', filename='vendor/bootstrap/bootstrap.min.js') }}"></script>
-<script src="{{ url_for('static', filename='vendor/select2/select2.min.js') }}"></script>
-<script src="{{ url_for('static', filename='vendor/owlcarousel/owl.carousel.min.js') }}"></script>
-<script src="{{ url_for('static', filename='vendor/stellar/jquery.stellar.js') }}"></script>
-<script src="{{ url_for('static', filename='vendor/isotope/isotope.min.js') }}"></script>
-<script src="{{ url_for('static', filename='vendor/lightcase/lightcase.js') }}"></script>
-<script src="{{ url_for('static', filename='vendor/waypoints/waypoint.min.js') }}"></script>
-<!--<script src="{{ url_for('static', filename='https://unpkg.com/aos@next/dist/aos.js') }}"></script>-->
-<script src="https://unpkg.com/aos@next/dist/aos.js"></script>
-<!-- Main JS -->
-
-<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.js"></script>
 <script src="{{ url_for('static', filename='js/connexion.js') }}"></script>
 
 
 <script src="{{ url_for('static', filename='js/app.min.js') }}"></script>
-<script src="//localhost:35729/livereload.js"></script>
 </body>
 </html>
