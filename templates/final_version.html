@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8">
+  <title>CodePen - Range slider trim YouTube video</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css'><link rel="stylesheet" href="static/css/final_version.css">
+
+</head>
+<body>
+<!-- partial:index.partial.html -->
+<section id="form">
+    <div class="desc">
+        <h1>YouTube downloader</h1>
+        <p>extract, video, audio, trim, cut, meme scenes from YouTube videos</p>
+    </div>
+
+    <div class="form">
+        <form>
+            <input class="url form__field" type="text" name="url" autocomplete="off" value="" placeholder="https://www.youtube.com/watch?v=G8PVTiknvs4">
+            <button type="submit" class="btn btn--primary btn--inside">Process</button>
+        </form>
+    </div>
+</section>
+
+<section id="ytplayer">
+  <div id="player" class="player">
+  </div>
+  
+  <div class="controls">
+    <div class="info">
+      <h5>Title of video</h5>
+<!--       
+      <div>Start: <span id="ytstart">00:00:00.0</span></div>
+      <div>End: <span id="ytend">00:10:43.0</span></div>
+ -->
+    </div>
+      
+    <div class="wrap">
+      <input id="range-slider" type="text" name="range" value="" />
+
+      <div class="player-controls">
+        
+        <div>
+          
+          <button id="slider-start-prev" class="slider-controls noselect" value="prev" title="Seek 0.1 sec"><<</button>
+          <button id="slider-start-next" class="slider-controls noselect" value="next" title="Seek 0.1 sec">>></button>
+        </div>
+        
+          <div id="time" class="noselect" title="Pause/Resume">00:00:00.0</div>
+          
+        <div>
+          <button id="slider-end-prev" class="slider-controls noselect" value="next" title="Seek 0.1 sec"><<</button>
+          <button id="slider-next" class="slider-controls noselect" value="prev" title="Seek 0.1 sec">>></button> 
+        </div>
+      </div>
+      
+    </div>
+    <div class="preview">
+      <div><small>Duration: <span id="ytduration">00:00:00.0</span></small></div>
+      <div id="preview">Preview</div>
+    </div>
+
+          <div class="download">
+            <ul>
+              <li id="d-file"><span>Download video file</span> <img src="http://ytdl.site/img/file.svg"></li>
+              <li id="d-audio"><span>Download audio file</span> <img src="http://ytdl.site/img/audio.svg"></li>
+              <li id="d-gif"><span>Download GIF animation</span> <img src="http://ytdl.site/img/gif.svg"></li>
+              <li id="d-pscreen"><span>Download screenshot</span> <img src="http://ytdl.site/img/screenshot.svg"></li>
+            </ul>
+          </div>
+  </div>
+</section>
+ 
+<!-- <header>
+  <div class="logo">LOGO</div>
+  <div class="top-menu">
+    <nav>
+      <ul>
+        <li><a href="#">About</a></li>
+        <li><a href="#">Help</a></li>
+        <li><a href="#">Contact</a></li>
+      </ul>
+    </nav>
+  </div>
+</header> -->
+
+ 
+
+<!-- <section id="help">
+  <h3>How to cut or trim YouTube video and download.</h3>
+  <ul>
+    <li>Place the URL address with the ID in the input box above and hit enter;</li>
+    <li>Seek the video to the preferred time and pause;</li>
+    <li>Set the current start time by clicking the start time button;</li>
+    <li>Fine tune the duration of YouTube video trimming using the arrows buttons;</li>
+    <li>Set the current end time by clicking the stop time button;</li>
+    <li>Make sure the start time is lower than end time;</li>
+    <li>Hit the download button to download the video, audio or animation;</li>
+  </ul>
+</section> -->
+  
+<!-- <footer>
+  <div class="copy">
+    <p>Copyright © 2019. All rights reserved.</p>
+  </div>
+  <img src="https://brave.com/wp-content/uploads/2018/02/switch_banner_1.png">
+</footer> -->
+<!-- partial -->
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
+<script src='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js'></script><script  src="static/js/final_version.js"></script>
+
+</body>
+</html>
