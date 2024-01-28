@@ -67,80 +67,81 @@
           <div class="download">
             <ul>
               <li id="d-file"><span>Download video file</span> <img src="http://ytdl.site/img/file.svg"></li>
+              <li id="d-audio"><span>Download audio file</span> <img src="http://ytdl.site/img/audio.svg"></li>
               <li id="d-gif"><span>Download GIF animation</span> <img src="http://ytdl.site/img/gif.svg"></li>
+              <li id="d-pscreen"><span>Download screenshot</span> <img src="http://ytdl.site/img/screenshot.svg"></li>
             </ul>
           </div>
   </div>
 </section>
 
 
+<!-- (Modification)  -->
+<form action="/submit_annotation" method="post">
+  <!-- Nom du joueur -->
+  <label for="playerName">Nom du joueur :</label>
+  <input type="text" id="playerName" name="playerName"><br><br>
 
+  <!-- Score après le point -->
+  <label for="scoreAfter">Score après :</label>
+  <input type="text" id="scoreAfter" name="scoreAfter"><br><br>
 
-  <form action="/submit_annotation" method="post">
-    <!-- Nom du joueur -->
-    <label for="playerName">Nom du joueur :</label>
-    <input type="text" id="playerName" name="playerName"><br><br>
+  <!-- Timing de début -->
+  <label for="startTime">Timing de début :</label>
+  <input type="text" id="startTime" name="startTime"><br><br>
 
-    <!-- Score après le point -->
-    <label for="scoreAfter">Score après :</label>
-    <input type="text" id="scoreAfter" name="scoreAfter"><br><br>
+  <!-- Timing de fin -->
+  <label for="endTime">Timing de fin :</label>
+  <input type="text" id="endTime" name="endTime"><br><br>
 
-    <!-- Timing de début -->
-    <label for="startTime">Timing de début :</label>
-    <input type="text" id="startTime" name="startTime"><br><br>
+  <!-- Coup entrant -->
+  <label for="incomingShot">Coup entrant :</label>
+  <select id="incomingShot" name="incomingShot">
+      <option value="smash">Smash</option>
+      <option value="volley">Volley</option>
+      <option value="dropShot">Amorti</option>
+      <option value="lob">Lob</option>
+  </select><br><br>
 
-    <!-- Timing de fin -->
-    <label for="endTime">Timing de fin :</label>
-    <input type="text" id="endTime" name="endTime"><br><br>
+  <!-- Revers ou coup droit entrant -->
+  <label for="incomingType">Revers ou coup droit entrant :</label>
+  <select id="incomingType" name="incomingType">
+      <option value="backhand">Revers</option>
+      <option value="forehand">Coup Droit</option>
+  </select><br><br>
 
-    <!-- Coup entrant -->
-    <label for="incomingShot">Coup entrant :</label>
-    <select id="incomingShot" name="incomingShot">
-        <option value="smash">Smash</option>
-        <option value="volley">Volley</option>
-        <option value="dropShot">Amorti</option>
-        <option value="lob">Lob</option>
-    </select><br><br>
+  <!-- Revers ou coup droit sortant -->
+  <label for="outgoingType">Revers ou coup droit sortant :</label>
+  <select id="outgoingType" name="outgoingType">
+      <option value="backhand">Revers</option>
+      <option value="forehand">Coup Droit</option>
+  </select><br><br>
 
-    <!-- Revers ou coup droit entrant -->
-    <label for="incomingType">Revers ou coup droit entrant :</label>
-    <select id="incomingType" name="incomingType">
-        <option value="backhand">Revers</option>
-        <option value="forehand">Coup Droit</option>
-    </select><br><br>
+  <!-- Coup sortant -->
+  <label for="outgoingShot">Coup sortant :</label>
+  <select id="outgoingShot" name="outgoingShot">
+      <option value="smash">Smash</option>
+      <option value="volley">Volley</option>
+      <option value="dropShot">Amorti</option>
+      <option value="lob">Lob</option>
+  </select><br><br>
 
-    <!-- Revers ou coup droit sortant -->
-    <label for="outgoingType">Revers ou coup droit sortant :</label>
-    <select id="outgoingType" name="outgoingType">
-        <option value="backhand">Revers</option>
-        <option value="forehand">Coup Droit</option>
-    </select><br><br>
+  <!-- Finition du point -->
+  <label for="pointFinish">Finition du point :</label>
+  <select id="pointFinish" name="pointFinish">
+      <option value="winner">Coup gagnant</option>
+      <option value="forcedError">Faute provoquée</option>
+      <option value="unforcedError">Faute directe</option>
+  </select><br><br>
 
-    <!-- Coup sortant -->
-    <label for="outgoingShot">Coup sortant :</label>
-    <select id="outgoingShot" name="outgoingShot">
-        <option value="smash">Smash</option>
-        <option value="volley">Volley</option>
-        <option value="dropShot">Amorti</option>
-        <option value="lob">Lob</option>
-    </select><br><br>
+  <!-- Position par rapport à l'arbitre -->
+  <label for="position">Position face à l'arbitre :</label>
+  <select id="position" name="position">
+      <option value="right">Droite</option>
+      <option value="left">Gauche</option>
+  </select><br><br>
 
-    <!-- Finition du point -->
-    <label for="pointFinish">Finition du point :</label>
-    <select id="pointFinish" name="pointFinish">
-        <option value="winner">Coup gagnant</option>
-        <option value="forcedError">Faute provoquée</option>
-        <option value="unforcedError">Faute directe</option>
-    </select><br><br>
-
-    <!-- Position par rapport à l'arbitre -->
-    <label for="position">Position face à l'arbitre :</label>
-    <select id="position" name="position">
-        <option value="right">Droite</option>
-        <option value="left">Gauche</option>
-    </select><br><br>
-
-    <input type="submit" value="Soumettre">
+  <input type="submit" value="Soumettre">
 </form>
 
 
@@ -172,6 +173,6 @@
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src="hhttps://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/annotation.js') }}"></script>
 </body>
 </html>
