@@ -205,6 +205,8 @@ def upload_video_desktop_app():
     # Get the uploaded file from the request
     video_file = request.files['videoFile']
 
+    video_file.save("static/video/" + video_file.filename)
+
     # Save the file to a temporary location or process it as needed
     # You may want to handle errors and provide a proper response
 
@@ -214,7 +216,7 @@ def upload_video_desktop_app():
     # Call the upload_video_desktop_app.py script with the file path
     # Include the --file argument properly
     script_path = 'upload_video/upload_video_desktop_app.py'
-    os.system(f'python {script_path} --file "{video_file.filename}" --title="upload test script" --description="Test to upload a video on youtube"  --keywords="python, programming" --category="28"  --privacyStatus="public"')
+    os.system(f'python {script_path} --file="static/video/{video_file.filename}" --title="upload test script" --description="Test to upload a video on youtube"  --keywords="python, programming" --category="28"  --privacyStatus="public"')
 
     return 'Video uploaded successfully!'
 
