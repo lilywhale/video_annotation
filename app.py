@@ -212,9 +212,9 @@ def upload_video_desktop_app():
     print("Uploaded Video File Name:", video_file.filename)
 
     # Call the upload_video_desktop_app.py script with the file path
-    # You may need to adjust this based on the script's requirements
+    # Include the --file argument properly
     script_path = 'upload_video/upload_video_desktop_app.py'
-    os.system(f'python {script_path} --file {video_file.filename} --title="upload test script" --description="Test to upload a video on youtube"  --keywords="python, programming" --category="28"  --privacyStatus="public"')
+    os.system(f'python {script_path} --file "{video_file.filename}" --title="upload test script" --description="Test to upload a video on youtube"  --keywords="python, programming" --category="28"  --privacyStatus="public"')
 
     return 'Video uploaded successfully!'
 
