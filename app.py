@@ -1,12 +1,9 @@
-from flask import Flask, render_template, request, session, redirect, url_for,send_file
-import requests
+from flask import Flask, render_template, request, session, redirect, url_for,send_file, jsonify
 # import mysql.connector
 import secrets
 import random
 import os
 from moviepy.editor import VideoFileClip
-import base64
-from io import BytesIO
 from PIL import Image
 from werkzeug.utils import secure_filename
 import pandas as pd
@@ -18,7 +15,7 @@ app.static_folder = 'static'
 app.secret_key = secrets.token_hex(16)  # Generate a 32-character secret key
 
 ALLOWED_EXTENSIONS = ['mp4']
-df_annotation = pd.DataFrame(columns = ["playerName", "scoreAfter", "startTime", "endTime", "incomingShot", "incomingType", "outgoingType", "outgoingShot", "pointFinish", "position"] )
+df_annotation = pd.DataFrame(columns=["playerName", "scoreAfter", "startTime", "endTime", "incomingShot", "incomingType", "outgoingType", "outgoingShot", "pointFinish", "position"] )
 
 """
 app.config['MYSQL_HOST'] = 'database-1.cczbiwiljwho.eu-north-1.rds.amazonaws.com'    # Replace with your MySQL server host
@@ -95,7 +92,6 @@ def login():
     user_data = (email, password)
     cursor.execute(select_user_query, user_data)
     user = cursor.fetchone()
-   
     # Close the database connection
     cursor.close()
     cnx.close()
@@ -148,6 +144,7 @@ def myvideos():
         print(video_info)
     return render_template('My_Videos.html', video_info=video_info)
 
+
 def get_video_thumbnail(video_path):
     clip = VideoFileClip(video_path)
     frame = clip.get_frame(15)
@@ -155,6 +152,7 @@ def get_video_thumbnail(video_path):
     thumbnail_path = os.path.join('static/thumbnails', os.path.basename(video_path).rsplit('.', 1)[0] + '.png')
     thumbnail.save(thumbnail_path)
     return thumbnail_path
+
 
 def allowed_file(filename):
     return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
@@ -220,6 +218,7 @@ def upload_video_desktop_app():
 
     return 'Video uploaded successfully!'
 
+
 @app.route('/submit_annotation', methods=['POST'])
 def submit_annotation():
 
@@ -242,23 +241,34 @@ def submit_annotation():
         "playerName": player_name,
         "scoreAfter": score_after,
         "startTime": start_time,
-        "endTime" : end_time,
-        "incomingShot" : incoming_shot,
-        "incomingType" : incoming_type,
-        "outgoingType" : outgoing_type,
-        "outgoingShot" : outgoing_shot,
-        "pointFinish" : point_finish,
-        "position" : position
+        "endTime": end_time,
+        "incomingShot": incoming_shot,
+        "incomingType": incoming_type,
+        "outgoingType": outgoing_type,
+        "outgoingShot": outgoing_shot,
+        "pointFinish": point_finish,
+        "position": position
     }
 
     df_annotation = pd.concat([df_annotation, pd.DataFrame([newrow])], axis=0, ignore_index=True)
     print(df_annotation)
 
     session["Annotations"] = df_annotation.to_json()
-    
-    return 'Annotation enregistrée'
+    return jsonify({'message': 'Annotation enregistrée'}), 200
+
+
+@app.route('/process_slider_values', methods=['POST'])
+def process_slider_values():
+    data = request.get_json()
+    start_time = data['startTime']
+    end_time = data['endTime']
+    print(start_time)
+    print(end_time)
+    # Process the start and end timeframes as needed
+    # You can perform any further processing or logic here
+
+    return jsonify({'message': 'Slider values received successfully'})
+
 
 if __name__ == '__main__':
     app.run()
-
-

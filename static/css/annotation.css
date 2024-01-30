@@ -356,3 +356,17 @@ button#slider-start-prev:active, button#slider-end-prev:active {
   background: transparent;
   border: 0
 }
+
+.form-container {
+  max-width: 900px; /* Adjust the width as needed */
+  margin: 0 auto; /* Center the form horizontally */
+  padding: 20px; /* Add padding to the container */
+  border: 1px solid #ccc; /* Add border */
+  border-radius: 8px; /* Add rounded corners */
+}
+
+.form-container form {
+  text-align: center; /* Center the form content */
+}
+
+

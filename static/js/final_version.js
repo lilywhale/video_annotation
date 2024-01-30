@@ -1,5 +1,5 @@
 var min = 0;
-var max_interval = 1000;
+var max_interval = 6000;
 var step = 0.1;
 var from = 0;
 var to = 60;
@@ -91,9 +91,6 @@ function onPlayerReady() {
       },
       onChange: function (data) {
         limit_filter(data)
-        $("#startTime").val(formatTime(data.from));
-        // Update the end time input field
-        $("#endTime").val(formatTime(data.to));
       },
       onFinish: function (data) {
         if(data.to > data.from){
@@ -183,24 +180,7 @@ function onPlayerReady() {
   }).on("mouseup mouseleave", function () {
     isHeldDown = false;
   });
-
-  // Function to format the time in HH:MM:SS format
-  function formatTime(timeInSeconds) {
-    var date = new Date(null);
-    date.setSeconds(timeInSeconds);
-    return date.toISOString().substr(11, 8);
-  }
 }
-  /*$d5_buttons.on("change", function() {
-    $("#startTime").val(formatTime(d5_instance.old_from));
-    // Update the end time input field
-    $("#endTime").val(formatTime(d5_instance.old_to));
-  });*/
-
-
-
-
-
 
 function limit_filter(data) {
   let duration = data.to - data.from
@@ -299,31 +279,7 @@ $(function(){
   });
 });
 
-/*
-$(function(){
 
-  $("#form form").submit(function(e) {
-  e.preventDefault(); // avoid to execute the actual submit of the form.
 
-  var yturl = $("form .url").val();
-  if(yturl == '') {
-    player.loadVideoById(videoId, 0);
-    return
-  }
-  var regex = /(youtu(?:\.be|be\.com)\/(?:.*v(?:\/|=)|(?:.*\/)?)([\w'-]+))/i; // https://regex101.com/r/JwS9rI/1
-  var ytid  = yturl.match(regex);
 
-  if(ytid){
-    if(ytid[2].length == 11) {
-      player.loadVideoById(ytid[2], 0);
-      videoId = ytid[2]
-      $(".player-timing input").val('0:00:00.0');
-    } else {
-      alert('Invalid YouTube ID! Please verify the link again.');
-    }
-  } else {
-    alert('Invalid YouTube URL! Please copy the link again.');
-  }
-  });
-});    
-*/
+

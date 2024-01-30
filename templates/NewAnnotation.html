@@ -7,9 +7,11 @@
   <title>TennisInsight</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css'>
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/annotation.css') }}">
 
 </head>
+
+
 <body>
 <!-- Upload video  -->
 <form id="videoUploadForm" action="/upload_video_desktop_app" method="post" enctype="multipart/form-data">
@@ -22,10 +24,6 @@
 </form>
 
 
-
-
-  
-<!-- partial:index.partial.html -->
 <section id="form">
     <div class="desc">
         <h1>YouTube downloader</h1>
@@ -43,14 +41,80 @@
 <section id="ytplayer">
   <div id="player" class="player">
   </div>
-  
+  <div class="form-container">
+    <form action="/submit_annotation" method="post">
+      <!-- Nom du joueur -->
+      <label for="playerName">Nom du joueur :</label>
+      <input type="text" id="playerName" name="playerName"><br><br>
+
+      <!-- Score après le point -->
+      <label for="scoreAfter">Score après :</label>
+      <input type="text" id="scoreAfter" name="scoreAfter"><br><br>
+
+      <!-- Timing de début -->
+      <label for="startTime">Timing de début :</label>
+      <input type="text" id="startTime" name="startTime"><br><br>
+
+      <!-- Timing de fin -->
+      <label for="endTime">Timing de fin :</label>
+      <input type="text" id="endTime" name="endTime"><br><br>
+
+      <!-- Coup entrant -->
+      <label for="incomingShot">Coup entrant :</label>
+      <select id="incomingShot" name="incomingShot">
+          <option value="smash">Smash</option>
+          <option value="volley">Volley</option>
+          <option value="dropShot">Amorti</option>
+          <option value="lob">Lob</option>
+      </select><br><br>
+
+      <!-- Revers ou coup droit entrant -->
+      <label for="incomingType">Revers ou coup droit entrant :</label>
+      <select id="incomingType" name="incomingType">
+          <option value="backhand">Revers</option>
+          <option value="forehand">Coup Droit</option>
+      </select><br><br>
+
+      <!-- Revers ou coup droit sortant -->
+      <label for="outgoingType">Revers ou coup droit sortant :</label>
+      <select id="outgoingType" name="outgoingType">
+          <option value="backhand">Revers</option>
+          <option value="forehand">Coup Droit</option>
+      </select><br><br>
+
+      <!-- Coup sortant -->
+      <label for="outgoingShot">Coup sortant :</label>
+      <select id="outgoingShot" name="outgoingShot">
+          <option value="smash">Smash</option>
+          <option value="volley">Volley</option>
+          <option value="dropShot">Amorti</option>
+          <option value="lob">Lob</option>
+      </select><br><br>
+
+      <!-- Finition du point -->
+      <label for="pointFinish">Finition du point :</label>
+      <select id="pointFinish" name="pointFinish">
+          <option value="winner">Coup gagnant</option>
+          <option value="forcedError">Faute provoquée</option>
+          <option value="unforcedError">Faute directe</option>
+      </select><br><br>
+
+      <!-- Position par rapport à l'arbitre -->
+      <label for="position">Position face à l'arbitre :</label>
+      <select id="position" name="position">
+          <option value="right">Droite</option>
+          <option value="left">Gauche</option>
+      </select><br><br>
+
+      <input type="submit" value="Soumettre" >
+    </form>
+  </div>
+</section>  
+
   <div class="controls">
     <div class="info">
       <h5>Title of video</h5>
-<!--       
-      <div>Start: <span id="ytstart">00:00:00.0</span></div>
-      <div>End: <span id="ytend">00:10:43.0</span></div>
- -->
+
     </div>
       
     <div class="wrap">
@@ -81,108 +145,40 @@
           <div class="download">
             <ul>
               <li id="d-file"><span>Download video file</span> <img src="http://ytdl.site/img/file.svg"></li>
-              <li id="d-audio"><span>Download audio file</span> <img src="http://ytdl.site/img/audio.svg"></li>
-              <li id="d-gif"><span>Download GIF animation</span> <img src="http://ytdl.site/img/gif.svg"></li>
-              <li id="d-pscreen"><span>Download screenshot</span> <img src="http://ytdl.site/img/screenshot.svg"></li>
             </ul>
           </div>
   </div>
-</section>
 
+  <!-- (Modification)  -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var annotationForm = document.querySelector('form[action="/submit_annotation"]');
 
-<!-- (Modification)  -->
-<form action="/submit_annotation" method="post">
-  <!-- Nom du joueur -->
-  <label for="playerName">Nom du joueur :</label>
-  <input type="text" id="playerName" name="playerName"><br><br>
+        annotationForm.addEventListener('submit', function (event) {
+            event.preventDefault();
 
-  <!-- Score après le point -->
-  <label for="scoreAfter">Score après :</label>
-  <input type="text" id="scoreAfter" name="scoreAfter"><br><br>
+            var formData = new FormData(annotationForm);
 
-  <!-- Timing de début -->
-  <label for="startTime">Timing de début :</label>
-  <input type="text" id="startTime" name="startTime"><br><br>
-
-  <!-- Timing de fin -->
-  <label for="endTime">Timing de fin :</label>
-  <input type="text" id="endTime" name="endTime"><br><br>
-
-  <!-- Coup entrant -->
-  <label for="incomingShot">Coup entrant :</label>
-  <select id="incomingShot" name="incomingShot">
-      <option value="smash">Smash</option>
-      <option value="volley">Volley</option>
-      <option value="dropShot">Amorti</option>
-      <option value="lob">Lob</option>
-  </select><br><br>
-
-  <!-- Revers ou coup droit entrant -->
-  <label for="incomingType">Revers ou coup droit entrant :</label>
-  <select id="incomingType" name="incomingType">
-      <option value="backhand">Revers</option>
-      <option value="forehand">Coup Droit</option>
-  </select><br><br>
-
-  <!-- Revers ou coup droit sortant -->
-  <label for="outgoingType">Revers ou coup droit sortant :</label>
-  <select id="outgoingType" name="outgoingType">
-      <option value="backhand">Revers</option>
-      <option value="forehand">Coup Droit</option>
-  </select><br><br>
-
-  <!-- Coup sortant -->
-  <label for="outgoingShot">Coup sortant :</label>
-  <select id="outgoingShot" name="outgoingShot">
-      <option value="smash">Smash</option>
-      <option value="volley">Volley</option>
-      <option value="dropShot">Amorti</option>
-      <option value="lob">Lob</option>
-  </select><br><br>
-
-  <!-- Finition du point -->
-  <label for="pointFinish">Finition du point :</label>
-  <select id="pointFinish" name="pointFinish">
-      <option value="winner">Coup gagnant</option>
-      <option value="forcedError">Faute provoquée</option>
-      <option value="unforcedError">Faute directe</option>
-  </select><br><br>
-
-  <!-- Position par rapport à l'arbitre -->
-  <label for="position">Position face à l'arbitre :</label>
-  <select id="position" name="position">
-      <option value="right">Droite</option>
-      <option value="left">Gauche</option>
-  </select><br><br>
-
-  <input type="submit" value="Soumettre">
-</form>
-
-
-
-<script>
-  document.addEventListener('DOMContentLoaded', function () {
-      // Sélectionner le formulaire
-      var annotationForm = document.querySelector('form[action="/submit_annotation"]');
-
-      // Ajouter un gestionnaire d'événements au formulaire
-      annotationForm.addEventListener('submit', function (event) {
-          // Empêchez l'envoi du formulaire par défaut
-          event.preventDefault();
-
-          // Utiliser SweetAlert pour afficher un message
-          Swal.fire({
-              title: 'Annotation enregistrée',
-              icon: 'success',
-              showConfirmButton: false,
-              timer: 2000  // Temps d'affichage en millisecondes (2 secondes)
-          }).then(function () {
-              // Réinitialiser le formulaire après la fermeture de SweetAlert
-              annotationForm.reset();
-          });
-      });
-  });
+            // Send AJAX request to Flask server
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', '/submit_annotation', true);
+            xhr.onload = function () {
+                if (xhr.status == 200) {
+                    Swal.fire({
+                        title: 'Annotation enregistrée',
+                        icon: 'success',
+                        showConfirmButton: false,
+                        timer: 2000  // 2 seconds
+                    }).then(function () {
+                        annotationForm.reset();
+                    });
+                }
+            };
+            xhr.send(formData);
+        });
+    });
 </script>
+  
 
 
 <!-- Upload video -->
@@ -220,7 +216,8 @@
 
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script type="text/javascript" src="hhttps://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js'></script>
+<script type="text/javascript" src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
 <script src="{{ url_for('static', filename='js/annotation.js') }}"></script>
 </body>
 </html>
