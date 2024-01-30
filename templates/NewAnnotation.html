@@ -11,6 +11,20 @@
 
 </head>
 <body>
+<!-- Upload video  -->
+<form id="videoUploadForm" action="/upload_video_desktop_app" method="post" enctype="multipart/form-data">
+    <h2>Video Upload</h2>
+
+    <label for="videoFile">Select Video File:</label>
+    <input type="file" id="videoFile" name="videoFile" accept="video/*" required><br>
+
+    <button type="button" onclick="uploadVideo()">Upload</button>
+</form>
+
+
+
+
+  
 <!-- partial:index.partial.html -->
 <section id="form">
     <div class="desc">
@@ -168,6 +182,40 @@
           });
       });
   });
+</script>
+
+
+<!-- Upload video -->
+<script>
+    function uploadVideo() {
+        var videoInput = document.getElementById('videoFile');
+        var file = videoInput.files[0];
+
+        // Check if a file is selected
+        if (!file) {
+            alert("Please select a video file.");
+            return;
+        }
+
+        // Prepare the FormData for the AJAX request
+        var formData = new FormData();
+        formData.append('videoFile', file);
+
+        // Make an AJAX request to upload_video_desktop_app.py
+        $.ajax({
+            url: '/upload_video_desktop_app',
+            type: 'POST',
+            data: formData,
+            processData: false,
+            contentType: false,
+            success: function(response) {
+                alert("Video uploaded successfully!");
+            },
+            error: function(error) {
+                alert("Error uploading video. Please try again.");
+            }
+        });
+    }
 </script>
 
 
