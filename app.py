@@ -197,6 +197,24 @@ def delete_video(video_name):
 def annotate_video(video_name):
     return render_template('NewAnnotation.html', video_name=video_name)
 
+
+#upload video
+
+@app.route('/upload_video_desktop_app', methods=['POST'])
+def upload_video_desktop_app():
+    # Get the uploaded file from the request
+    video_file = request.files['videoFile']
+
+    # Save the file to a temporary location or process it as needed
+    # You may want to handle errors and provide a proper response
+
+    # Call the upload_video_desktop_app.py script with the file path
+    # You may need to adjust this based on the script's requirements
+    script_path = '/path/to/upload_video_desktop_app.py'
+    os.system(f'python {script_path} --file {video_file.filename}')
+
+    return 'Video uploaded successfully!'
+
 @app.route('/submit_annotation', methods=['POST'])
 def submit_annotation():
 
