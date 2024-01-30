@@ -208,6 +208,9 @@ def upload_video_desktop_app():
     # Save the file to a temporary location or process it as needed
     # You may want to handle errors and provide a proper response
 
+    # Print the file name to the console for debugging
+    print("Uploaded Video File Name:", video_file.filename)
+
     # Call the upload_video_desktop_app.py script with the file path
     # You may need to adjust this based on the script's requirements
     script_path = 'upload_video/upload_video_desktop_app.py'
