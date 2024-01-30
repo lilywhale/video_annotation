@@ -210,7 +210,7 @@ def upload_video_desktop_app():
 
     # Call the upload_video_desktop_app.py script with the file path
     # You may need to adjust this based on the script's requirements
-    script_path = '/path/to/upload_video_desktop_app.py'
+    script_path = 'upload_video/upload_video_desktop_app.py'
     os.system(f'python {script_path} --file {video_file.filename}')
 
     return 'Video uploaded successfully!'
