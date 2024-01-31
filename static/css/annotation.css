@@ -6,6 +6,7 @@ body {
   font-family: "Droid Sans Mono",Menlo,Monaco,Consolas,"Liberation Mono","Courier New",monospace;
   color: #FFF;
 }
+
 header {
   padding:2em;
   display:flex;
@@ -33,7 +34,7 @@ iframe {
   border-bottom: 1px solid rgba(48,52,60,0.75);
 }
 .wrap {
-  padding: 20px 0;
+  padding: 0; /*20px 0*/
   margin: 0 auto;
 
 }
@@ -72,29 +73,24 @@ button#slider-start-prev:active, button#slider-end-prev:active {
   max-width: 1700px;
   margin: 0 auto;
   padding: 2em;
-    border-bottom: 1px solid rgba(48,52,60,0.75);
+  border-bottom: 1px solid rgba(48,52,60,0.75);
 }
 
-#ytplayer {
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
-  max-width: 100%; /* Ajusté pour occuper toute la largeur */
-  margin: 0 auto;
-  padding: 2em;
-}
+
 
 #player {
-  width: 100%; /* Ajusté pour occuper toute la largeur */
-  height: 500px; /* Hauteur ajustée pour un affichage plus grand */
+  width: 95%; /* Ajusté pour occuper toute la largeur */
+  height: 600px; /* Hauteur ajustée pour un affichage plus grand */
+  padding : 10px; 
 }
 
 .controls {
   flex-grow: 1;
-  margin: 0 auto; /* Centrer la zone "controls" */
-  max-width: 600px; /* Ajuster la largeur maximale selon les besoins */
-  width: 100%; /* Ajusté pour occuper la largeur disponible */
-}
+  margin-left: 150px;
+  margin-top : -100px; 
+  max-width: 600px; 
+  width: 100%; 
+} 
 
 #prevtime, #nexttime {
     flex: 1;
@@ -137,15 +133,21 @@ button#slider-start-prev:active, button#slider-end-prev:active {
 }
 
 .irs--round .irs-min, .irs--round .irs-max {
-  color: #888;
+  color: #c4c4c9;
 }
+
+
 #form {
     padding: 25px;
+}
+.Upload{
+  margin-left: 900px;
+  margin-top: -110px;
 }
 .form {
     max-width: 800px;
     height: 80px;
-    margin: 0 auto;
+    margin: 50px;
     margin-top: 25px;
 }
 .form label {
@@ -354,19 +356,114 @@ button#slider-start-prev:active, button#slider-end-prev:active {
 }
 #range-slider {
   background: transparent;
-  border: 0
+  border: 0;
+  max-width: 1700px; /*Modifiaction*/
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .form-container {
-  max-width: 900px; /* Adjust the width as needed */
-  margin: 0 auto; /* Center the form horizontally */
-  padding: 20px; /* Add padding to the container */
-  border: 1px solid #ccc; /* Add border */
-  border-radius: 8px; /* Add rounded corners */
+  width: 450px; /* Réduit encore la largeur du conteneur du formulaire */
+  height: 700px;
+  margin: 10px auto; /* Centrer le formulaire sur la page */
+  background: transparent;
+  border: 2px solid rgb(43, 205, 238);
+  backdrop-filter: blur(9px);
+  color: #fff;
+  border-radius: 12px;
+  padding-left: 30px; /* Réduit le padding intérieur pour un formulaire plus compact */
+  padding-top: 30px;
+  padding-bottom: 20px; 
+  box-shadow: 0 0 10px rgba(0, 0, 0, .1);
 }
 
-.form-container form {
-  text-align: center; /* Center the form content */
+.form-container label {
+  font-size: 15px; /* Réduit la taille de police des labels */
+  margin-bottom: 8px; /* réduit l'espace après les labels */
+  display: block;
+  line-height: 0.5;
 }
+
+.form-container input[type="text"],
+.form-container select {
+  width: 90%; /* La largeur des inputs sera la même que celle du conteneur */
+  height: 25px; /* Réduit davantage la hauteur des inputs */
+  background: transparent;
+  border: 2px solid rgb(43, 205, 238);
+  border-radius: 20px; /* Ajuste le rayon de la bordure pour les inputs */
+  font-size: 12px; /* Réduit la taille de police des inputs */
+  color: #fff;
+  padding: 0 10px; /* Réduit le padding horizontal pour les inputs */
+  margin-bottom: 8px; /* Réduit l'espace entre les inputs */
+}
+
+.form-container input[type="submit"] {
+  height: 25px; /* Réduit la hauteur du bouton de soumission */
+  font-size: 13px; /* Ajuste la taille de police pour la lisibilité */
+  margin-top: 2px; /* Réduit l'espace avant le bouton de soumission */
+}
+
+/* Assurez-vous que le formulaire reste utilisable sur les petits écrans */
+@media (max-width: 460px) {
+  .form-container {
+    width: 90%; /* Le formulaire prend 90% de la largeur de l'écran sur les petits appareils */
+    padding: 10px;
+  }
+}
+
+
+
+
+
+
+
+
+
+
+
+/*Modificatio*/
+.layout-container {
+  display: flex;
+}
+
+.video-and-slider {
+  flex: 1; 
+  flex-direction: column; 
+}
+
+.player {
+  width: 100%;
+}
+
+.slider-container {
+  width: 90%; 
+  margin: 0 auto;
+}
+
+#range-slider {
+  width: 90%; 
+}
+
+#form {
+  transition: opacity 0.5s ease-in-out; /* Assure une transition douce de l'opacité */
+  /* autres styles pour #form */
+}
+
+
+
+
+
 
 

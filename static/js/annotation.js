@@ -1,5 +1,5 @@
 var min = 0;
-var max_interval = 1000;
+var max_interval = 2000;
 var step = 0.1;
 var from = 0;
 var to = 60;
@@ -40,6 +40,29 @@ function updateUrlParameter(url, paramName, paramValue) {
     }
     return newUrl;
 }
+
+
+
+window.addEventListener('scroll', function() {
+  var formSection = document.getElementById('form');
+  var scrollPosition = window.pageYOffset || document.documentElement.scrollTop;
+  
+  // Ajustez ces valeurs selon les besoins
+  var fadeStart = 100; // Position de défilement où l'effet commence
+  var fadeUntil = 400; // Position de défilement où l'effet se termine
+  
+  var opacity = 1;
+  
+  if (scrollPosition < fadeStart) {
+    opacity = 1;
+  } else if (scrollPosition > fadeStart && scrollPosition < fadeUntil) {
+    opacity = 1 - (scrollPosition - fadeStart) / (fadeUntil - fadeStart);
+  } else {
+    opacity = 0;
+  }
+  
+  formSection.style.opacity = opacity;
+});
 
 
 function onYouTubeIframeAPIReady() {

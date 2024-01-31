@@ -13,21 +13,13 @@
 
 
 <body>
-<!-- Upload video  -->
-<form id="videoUploadForm" action="/upload_video_desktop_app" method="post" enctype="multipart/form-data">
-    <h2>Video Upload</h2>
 
-    <label for="videoFile">Select Video File:</label>
-    <input type="file" id="videoFile" name="videoFile" accept="video/*" required><br>
-
-    <button type="button" onclick="uploadVideo()">Upload</button>
-</form>
 
 
 <section id="form">
     <div class="desc">
         <h1>YouTube downloader</h1>
-        <p>extract, video, audio, trim, cut, meme scenes from YouTube videos</p>
+        <!-- <p>extract, video, audio, trim, cut, meme scenes from YouTube videos</p> -->
     </div>
 
     <div class="form">
@@ -36,12 +28,32 @@
             <button type="submit" class="btn btn--primary btn--inside">Process</button>
         </form>
     </div>
+
+    <div class="Upload">
+      <!-- Upload video  -->
+        <form id="videoUploadForm" action="/upload_video_desktop_app" method="post" enctype="multipart/form-data">
+          <label for="videoFile">Select Video File:</label>
+          <input type="file" id="videoFile" name="videoFile" accept="video/*" required><br>
+
+          <button type="button" onclick="uploadVideo()">Upload</button>
+        </form>
+    </div>
 </section>
 
-<section id="ytplayer">
-  <div id="player" class="player">
+
+
+
+<div class="layout-container">
+  <div class="video-and-slider">
+    <div id="player" class="player">
+      <!-- Le lecteur YouTube s'insère ici -->
+    </div>
+    <div class="slider-container">
+      <input id="range-slider" type="text" name="range" value="" />
+    </div>
   </div>
   <div class="form-container">
+    <!-- Le formulaire s'insère ici -->
     <form action="/submit_annotation" method="post">
       <!-- Nom du joueur -->
       <label for="playerName">Nom du joueur :</label>
@@ -109,16 +121,18 @@
       <input type="submit" value="Soumettre" >
     </form>
   </div>
-</section>  
+</div>
+
+
+
+
+
 
   <div class="controls">
     <div class="info">
-      <h5>Title of video</h5>
-
     </div>
-      
     <div class="wrap">
-      <input id="range-slider" type="text" name="range" value="" />
+      <!-- <input id="range-slider" type="text" name="range" value="" /> -->
 
       <div class="player-controls">
         
@@ -206,14 +220,6 @@
             contentType: false,
             success: function(response) {
                 alert("Video uploaded successfully! File name: " + file.name);
-                
-                // Extract the videoId from the response if available
-                var videoId = response.videoId;
-
-                // Update the URL with the new videoId
-                if (videoId) {
-                    window.location.href = updateUrlParameter(window.location.href, 'videoId', videoId);
-                }
             },
             error: function(error) {
                 alert("Error uploading video. Please try again.");
