@@ -208,7 +208,9 @@
             processData: false,
             contentType: false,
             success: function(response) {
-                alert("Video uploaded successfully! File name: " + file.name);
+                var videoId = response.videoId;
+                alert("Video uploaded successfully! Video ID: " + videoId);
+              
                 
                 // Extract the videoId from the response if available
                 var videoId = response.videoId;
