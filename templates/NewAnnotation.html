@@ -209,6 +209,14 @@
             contentType: false,
             success: function(response) {
                 alert("Video uploaded successfully! File name: " + file.name);
+                
+                // Extract the videoId from the response if available
+                var videoId = response.videoId;
+
+                // Update the URL with the new videoId
+                if (videoId) {
+                    window.location.href = updateUrlParameter(window.location.href, 'videoId', videoId);
+                }
             },
             error: function(error) {
                 alert("Error uploading video. Please try again.");
