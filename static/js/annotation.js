@@ -91,9 +91,9 @@ function onPlayerReady() {
       },
       onChange: function (data) {
         limit_filter(data)
-        $("#startTime").val(formatTime(data.from));
+        $("#startTime").val(data.from);
         // Update the end time input field
-        $("#endTime").val(formatTime(data.to));
+        $("#endTime").val(data.to);
       },
       onFinish: function (data) {
         if(data.to > data.from){
