@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, session, redirect, url_for,send_file, jsonify
 # import mysql.connector
 import secrets
+import datetime
 import random
 import os
 import json
@@ -202,7 +203,8 @@ def upload_video_desktop_app():
     # Get the uploaded file from the request
     video_file = request.files['videoFile']
 
-    video_file.save("static/video/" + video_file.filename.split(".")[0] + "/" + video_file.filename)
+    video_file.save("static/video/" + video_file.filename)
+    # video_file.save("static/video/" + video_file.filename.split(".")[0] + "/" + video_file.filename)
     session['current_video'] = video_file.filename
 
     # Print the file name to the console for debugging
@@ -282,12 +284,12 @@ def submit_annotation():
     # Write the trimmed video to the output file
     trimmed_clip.write_videofile(output_path, codec="libx264", fps=24)"""
 
-    clip = VideoFileClip("static/video/Royalty ► My Journey to You.mp4")
+    clip = VideoFileClip("static/video/tennis highlights.mp4")
 
     # Trim the video to the specified portion
     trimmed_clip = clip.subclip(start_time, end_time)
 
-    output_directory = './output/Royalty/videos/'
+    output_directory = './output/demo/videos/'
 
     # Create the directory if it doesn't exist
     if not os.path.exists(output_directory):
@@ -317,7 +319,12 @@ def process_slider_values():
 
 @app.route('/download_data', methods=['GET'])
 def download_data():
-    
+
+    df_annotation_json = session.get('df_annotation')
+    df_annotation = pd.read_json(df_annotation_json)
+    df_annotation.to_csv(f'./app/output/demo/{datetime.now()}.csv')
+
+    """
     # Path to the folder to be zipped
     folder_path = './output/Royalty/'
 
@@ -346,7 +353,7 @@ def download_data():
     return send_file(zip_file_path,
                      mimetype='application/zip',
                      attachment_filename='Royalty.zip',
-                     as_attachment=True)
+                     as_attachment=True)"""
 
 if __name__ == '__main__':
     app.run()
