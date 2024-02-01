@@ -15,6 +15,9 @@
 <body>
 
 
+<form action="/download_data" method="get">
+  <button type="submit">Download Data</button>
+</form>
 
 <section id="form">
     <div class="desc">
@@ -219,7 +222,17 @@
             processData: false,
             contentType: false,
             success: function(response) {
-                alert("Video uploaded successfully! File name: " + file.name);
+             
+                alert("Video uploaded successfully! File Name: " + file.name);
+              
+                
+                // Extract the videoId from the response if available
+                var videoId = response.videoId;
+
+                // Update the URL with the new videoId
+                if (videoId) {
+                    window.location.href = updateUrlParameter(window.location.href, 'videoId', videoId);
+                }
             },
             error: function(error) {
                 alert("Error uploading video. Please try again.");

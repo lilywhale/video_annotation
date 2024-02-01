@@ -14,7 +14,6 @@ from oauth2client.tools import argparser, run_flow
 from googleapiclient.errors import HttpError
 
 
-
 # Explicitly tell the underlying HTTP transport library not to retry, since
 # we are handling retry logic ourselves.
 httplib2.RETRIES = 1

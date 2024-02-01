@@ -1,21 +1,22 @@
 from flask import Flask, render_template, request, session, redirect, url_for,send_file, jsonify
 # import mysql.connector
 import secrets
+import datetime
 import random
 import os
-from moviepy.editor import VideoFileClip
+import json
+from io import BytesIO
+import zipfile
+from moviepy.video.io.VideoFileClip import VideoFileClip
 from PIL import Image
 from werkzeug.utils import secure_filename
 import pandas as pd
-
-
 
 app = Flask(__name__)
 app.static_folder = 'static'
 app.secret_key = secrets.token_hex(16)  # Generate a 32-character secret key
 
 ALLOWED_EXTENSIONS = ['mp4']
-df_annotation = pd.DataFrame(columns=["playerName", "scoreAfter", "startTime", "endTime", "incomingShot", "incomingType", "outgoingType", "outgoingShot", "pointFinish", "position"] )
 
 """
 app.config['MYSQL_HOST'] = 'database-1.cczbiwiljwho.eu-north-1.rds.amazonaws.com'    # Replace with your MySQL server host
@@ -196,17 +197,15 @@ def annotate_video(video_name):
     return render_template('NewAnnotation.html', video_name=video_name)
 
 
-#upload video
-
+# upload video
 @app.route('/upload_video_desktop_app', methods=['POST'])
 def upload_video_desktop_app():
     # Get the uploaded file from the request
     video_file = request.files['videoFile']
 
     video_file.save("static/video/" + video_file.filename)
-
-    # Save the file to a temporary location or process it as needed
-    # You may want to handle errors and provide a proper response
+    # video_file.save("static/video/" + video_file.filename.split(".")[0] + "/" + video_file.filename)
+    session['current_video'] = video_file.filename
 
     # Print the file name to the console for debugging
     print("Uploaded Video File Name:", video_file.filename)
@@ -222,8 +221,14 @@ def upload_video_desktop_app():
 @app.route('/submit_annotation', methods=['POST'])
 def submit_annotation():
 
-    global df_annotation
-
+    if 'df_annotation' not in session:
+        df_annotation = pd.DataFrame(columns=["playerName", "scoreAfter", "startTime", "endTime",
+                                                        "incomingShot", "incomingType", "outgoingType",
+                                                        "outgoingShot", "pointFinish", "position"])
+    else: 
+        df_annotation_json = session.get('df_annotation')
+        df_annotation = pd.read_json(df_annotation_json)
+        print(type(df_annotation))
     # Récupération des données du formulaire
     player_name = request.form['playerName']
     score_after = request.form['scoreAfter']
@@ -237,7 +242,7 @@ def submit_annotation():
     position = request.form['position']
 
     # Traiter ou stocker les données ici
-    newrow = {
+    new_row = {
         "playerName": player_name,
         "scoreAfter": score_after,
         "startTime": start_time,
@@ -249,11 +254,53 @@ def submit_annotation():
         "pointFinish": point_finish,
         "position": position
     }
+    """df_annotation_json = session.get('df_annotation')
+    print(df_annotation_json)
+    print(type(df_annotation_json))
+    df_annotation_data = json.loads(df_annotation_json)
+    print(df_annotation_data)
+    print(type(df_annotation_data))
+    df_annotation = pd.DataFrame(df_annotation_data)"""
+    
+    df_annotation = pd.concat([df_annotation, pd.DataFrame([new_row])], ignore_index=True)
 
-    df_annotation = pd.concat([df_annotation, pd.DataFrame([newrow])], axis=0, ignore_index=True)
+    if len(df_annotation) == 1:
+        last_index = 0
+    else:
+        last_index = df_annotation.index[-1]
     print(df_annotation)
+    
+    annotation_data = df_annotation.to_dict(orient='records')
+    json_data = json.dumps(annotation_data)
+    session['df_annotation'] = json_data
+    """clip = VideoFileClip("static/video/" + session['current_video'])
 
-    session["Annotations"] = df_annotation.to_json()
+    # Trim the video to the specified portion
+    trimmed_clip = clip.subclip(start_time, end_time)
+
+    # Specify the output file path for the trimmed video
+    output_path = './output/' + session['current_video']
+
+    # Write the trimmed video to the output file
+    trimmed_clip.write_videofile(output_path, codec="libx264", fps=24)"""
+
+    clip = VideoFileClip("static/video/tennis highlights.mp4")
+
+    # Trim the video to the specified portion
+    trimmed_clip = clip.subclip(start_time, end_time)
+
+    output_directory = './output/demo/videos/'
+
+    # Create the directory if it doesn't exist
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+
+    # Specify the output file path for the trimmed video using the last_index
+    output_path = os.path.join(output_directory, str(last_index) + ".mp4")
+
+    # Write the trimmed video to the output file
+    trimmed_clip.write_videofile(output_path, codec="libx264", fps=24)
+
     return jsonify({'message': 'Annotation enregistrée'}), 200
 
 
@@ -269,6 +316,44 @@ def process_slider_values():
 
     return jsonify({'message': 'Slider values received successfully'})
 
+
+@app.route('/download_data', methods=['GET'])
+def download_data():
+
+    df_annotation_json = session.get('df_annotation')
+    df_annotation = pd.read_json(df_annotation_json)
+    df_annotation.to_csv(f'./app/output/demo/{datetime.now()}.csv')
+
+    """
+    # Path to the folder to be zipped
+    folder_path = './output/Royalty/'
+
+    # Path to the data.csv file
+    csv_file_path = os.path.join(folder_path, 'data.csv')
+    
+    df_annotation_json = session.get('df_annotation')
+    df_annotation = pd.read_json(df_annotation_json)
+
+    df_annotation.to_csv(folder_path, index=False)
+    
+    # Create a ZipFile object in write mode
+    zip_file_path = './output/Royalty.zip'
+    with zipfile.ZipFile(zip_file_path, 'w') as zipf:
+        # Write the data.csv file to the zip
+        zipf.write(csv_file_path, arcname='data.csv')
+
+        # Add the 'video' folder and its contents to the zip
+        video_folder_path = os.path.join(folder_path, 'videos')
+        for root, dirs, files in os.walk(video_folder_path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                zipf.write(file_path, arcname=os.path.relpath(file_path, folder_path))
+
+    # Send the zip file for download
+    return send_file(zip_file_path,
+                     mimetype='application/zip',
+                     attachment_filename='Royalty.zip',
+                     as_attachment=True)"""
 
 if __name__ == '__main__':
     app.run()
