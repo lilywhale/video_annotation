@@ -1,5 +1,5 @@
 var min = 0;
-var max_interval = 2000;
+var max_interval = 3000;
 var step = 0.1;
 var from = 0;
 var to = 60;
@@ -86,9 +86,28 @@ function onYouTubeIframeAPIReady() {
   });
 }
 
-function onPlayerStateChange() {
-  // console.log(player.getPlayerState())
+function onPlayerStateChange(event) {
+  // Vérifie si la vidéo est en train de jouer
+  if (event.data == YT.PlayerState.PLAYING) {
+    checkVideoTime();
+  }
 }
+
+function checkVideoTime() {
+  var endTime = parseFloat($("#endTime").val()); // Obtenez le temps de fin
+  if (!endTime) return; // Sortie si endTime n'est pas défini ou parseable
+
+  var check = function() {
+    var currentTime = player.getCurrentTime();
+    if (currentTime >= endTime) {
+      player.pauseVideo();
+    } else {
+      setTimeout(check, 100); // Vérifiez toutes les 100 millisecondes
+    }
+  };
+  check(); // Commence la vérification
+}
+
 
 function onPlayerReady() {
   player.playVideo();
@@ -131,7 +150,7 @@ function onPlayerReady() {
             if (player.getCurrentTime() >= data.to) {
               player.pauseVideo();
             }
-          }, (data.to - data.from) * 1000);
+          }, (data.to - data.from) );
         }
       }
   });
