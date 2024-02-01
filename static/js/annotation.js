@@ -98,7 +98,7 @@ function onPlayerReady() {
   var $d5_buttons = $(".slider-controls");
   $d5.ionRangeSlider({
       type: "double",
-      skin: "round",
+      skin: "flat",
       min: min,
       max: player.getDuration(),
       max_interval: max_interval,
