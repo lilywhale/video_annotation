@@ -200,7 +200,7 @@ def annotate_video(video_name):
 # upload video
 @app.route('/upload_video_desktop_app', methods=['POST'])
 def upload_video_desktop_app():
-    # Get the uploaded file from the request
+    """# Get the uploaded file from the request
     video_file = request.files['videoFile']
     video_file.save("static/video/" + video_file.filename)
     # video_file.save("static/video/" + video_file.filename.split(".")[0] + "/" + video_file.filename)
@@ -218,7 +218,7 @@ def upload_video_desktop_app():
     # Call the upload_video_desktop_app.py script with the file path
     # Include the --file argument properly
     script_path = 'upload_video/upload_video_desktop_app.py'
-    os.system(f'python {script_path} --file="static/video/{video_file.filename}" --title="upload test script" --description="Test to upload a video on youtube"  --keywords="python, programming" --category="28"  --privacyStatus="public"')"""
+    os.system(f'python {script_path} --file="static/video/{video_file.filename}" --title="{video_file.filename}" --description="Test to upload a video on youtube"  --keywords="python, programming" --category="28"  --privacyStatus="unlisted"')
 
     return 'Video uploaded successfully!'
 
@@ -310,7 +310,7 @@ def download_data():
 
     df_annotation_json = session.get('df_annotation')
     df_annotation = pd.read_json(df_annotation_json)
-    output_directory = './output/' + session['current_video'] + 'annotations.csv'
+    output_directory = './output/' + session['current_video'] + '/annotations.csv'
     df_annotation.to_csv(output_directory)
 
     directory_to_zip = './output/' + session['current_video']
