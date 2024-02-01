@@ -1,0 +1,4 @@
+,playerName,scoreAfter,startTime,endTime,incomingShot,incomingType,outgoingType,outgoingShot,pointFinish,position
+0,djokovic,0-0,376.3,376.3,smash,backhand,backhand,smash,winner,right
+1,djokovic,0-0,375.5,387.6,smash,backhand,backhand,smash,winner,right
+2,aaaa,1-5,689.8,714.0,smash,backhand,backhand,smash,winner,right
