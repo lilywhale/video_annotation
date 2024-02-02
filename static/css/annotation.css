@@ -410,9 +410,11 @@ button#slider-start-prev:active, button#slider-end-prev:active {
 }
 
 .form-container input[type="submit"] {
-  height: 25px; /* Réduit la hauteur du bouton de soumission */
+  height: 30px; /* Réduit la hauteur du bouton de soumission */
+  width : 100px;
   font-size: 13px; /* Ajuste la taille de police pour la lisibilité */
   margin-top: 2px; /* Réduit l'espace avant le bouton de soumission */
+  border-radius: 20px;
 }
 
 /* Assurez-vous que le formulaire reste utilisable sur les petits écrans */
@@ -486,6 +488,7 @@ button#slider-start-prev:active, button#slider-end-prev:active {
 /* Change la couleur du texte des labels (par exemple, les valeurs affichées au-dessus du slider) */
 .irs--flat .irs-min, .irs--flat .irs-max, .irs--flat .irs-from, .irs--flat .irs-to, .irs--flat .irs-single {
   color: #FFFFFF; /* Texte en blanc */
+  background-color :  #041f2d; 
 }
 
 /* Styles pour les boutons */
@@ -523,11 +526,13 @@ button {
 .btn-download {
   background-color: #f44336;
   color: white;
+  margin: 40px;
 }
 
 /* Styles au survol de la classe "btn-download" */
 .btn-download:hover {
   background-color: #d32f2f;
+  
 }
 
 /* Styles pour la classe "btn-choose-file" */
@@ -540,7 +545,7 @@ button {
 
 /* Styles au survol de la classe "btn-choose-file" */
 .btn-choose-file:hover {
-  color: #008CBA;
+  color: #4fa9c7;
 }
 
 form#videoUploadForm input[type="file"] {
