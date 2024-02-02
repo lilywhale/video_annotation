@@ -15,9 +15,7 @@
 <body>
 
 
-<form action="/download_data" method="get">
-  <button type="submit">Download Data</button>
-</form>
+
 
 <section id="form">
     <div class="desc">
@@ -34,10 +32,10 @@
     <div class="Upload">
       <!-- Upload video  -->
         <form id="videoUploadForm" action="/upload_video_desktop_app" method="post" enctype="multipart/form-data">
-          <label for="videoFile">Select Video File:</label>
+          <label for="videoFile" class="btn-choose-file">Select Video File:</label>
           <input type="file" id="videoFile" name="videoFile" accept="video/*" required><br>
 
-          <button type="button" onclick="uploadVideo()">Upload</button>
+          <button type="button" onclick="uploadVideo()" class="btn btn-upload">Upload</button>
         </form>
     </div>
 </section>
@@ -120,7 +118,7 @@
           <option value="left">Gauche</option>
       </select><br><br>
 
-      <input type="submit" value="Soumettre" >
+      <input type="submit" value="Soumettre" class="btn btn-submit">
     </form>
   </div>
 </div>
@@ -158,12 +156,12 @@
       <div id="preview">Preview</div>
     </div>
 
-          <div class="download">
-            <ul>
-              <li id="d-file"><span>Download video file</span> <img src="http://ytdl.site/img/file.svg"></li>
-            </ul>
-          </div>
+         
   </div>
+
+  <form action="/download_data" method="get">
+    <button type="submit" class="btn-download">Download Data</button>
+  </form>
 
   <!-- (Modification)  -->
   <script>
