@@ -11,6 +11,7 @@ from moviepy.video.io.VideoFileClip import VideoFileClip
 from PIL import Image
 from werkzeug.utils import secure_filename
 import pandas as pd
+from pytube import YouTube
 
 app = Flask(__name__)
 app.static_folder = 'static'
@@ -270,7 +271,7 @@ def submit_annotation():
     annotation_data = df_annotation.to_dict(orient='records')
     json_data = json.dumps(annotation_data)
     session['df_annotation'] = json_data
-    
+    print(session['current_video'])
     clip = VideoFileClip("static/video/" + session['current_video'])
 
     # Trim the video to the specified portion
@@ -304,6 +305,30 @@ def process_slider_values():
 
     return jsonify({'message': 'Slider values received successfully'})
 
+
+@app.route('/process_url', methods=['POST'])
+def process_url():
+    if request.method == 'POST':
+
+        # Extract the URL parameter from the form submission
+        video_url = request.form['url']
+
+        yt = YouTube(video_url)
+        filename = yt.title
+        print(type(filename))
+        print(filename)
+        stream = yt.streams.get_by_itag(22)
+
+        # Download the stream to a file
+        stream.download(output_path="static/video/")
+        print('session 1')
+        session['current_video'] = '.mp4'
+        print(session['current_video'])
+
+        session['current_video'] = filename + '.mp4'
+        print(session['current_video'])
+
+    return jsonify({'message': 'Video loaded successfully'}), 200
 
 @app.route('/download_data', methods=['GET'])
 def download_data():

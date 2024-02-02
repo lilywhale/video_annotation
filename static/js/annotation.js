@@ -93,6 +93,7 @@ function onPlayerStateChange(event) {
   }
 }
 
+
 function checkVideoTime() {
   var endTime = parseFloat($("#endTime").val()); // Obtenez le temps de fin
   if (!endTime) return; // Sortie si endTime n'est pas défini ou parseable
@@ -327,45 +328,32 @@ $(function(){
 
     var yturl = $("form .url").val();
     if(yturl == '') {
-      window.location.href = updateUrlParameter(window.location.href, 'videoId', 't0IziCyyMaE');
+      window.location.href = updateUrlParameter(window.location.href, 'videoId', 'Fgy8tjrKy1Y&pp=ygUaY2FybG9zIGFsY2FyYXogdnMgZGpva292aWM%3D');
       return;
     }
     var regex = /(youtu(?:\.be|be\.com)\/(?:.*v(?:\/|=)|(?:.*\/)?)([\w'-]+))/i;
     var ytid  = yturl.match(regex);
 
     if(ytid && ytid[2].length == 11) {
-      window.location.href = updateUrlParameter(window.location.href, 'videoId', ytid[2]);
+      // Manually submit the form data to the Flask route using AJAX
+      updateUrlParameter(window.location.href, 'videoId', ytid[2]);
+      $.ajax({
+        type: "POST",
+        url: "/process_url", // Flask route for processing form data
+        data: {url: yturl}, // Form data to be sent to the server
+        success: function(response) {
+          // Handle success response if needed
+          console.log(response);
+          player.loadVideoById(ytid[2]);
+        },
+        error: function(xhr, status, error) {
+          // Handle error response if needed
+          console.error(xhr.responseText);
+        }
+      });
     } else {
       alert('Invalid YouTube URL or ID! Please verify again.');
     }
   });
 });
 
-/*
-$(function(){
-
-  $("#form form").submit(function(e) {
-  e.preventDefault(); // avoid to execute the actual submit of the form.
-
-  var yturl = $("form .url").val();
-  if(yturl == '') {
-    player.loadVideoById(videoId, 0);
-    return
-  }
-  var regex = /(youtu(?:\.be|be\.com)\/(?:.*v(?:\/|=)|(?:.*\/)?)([\w'-]+))/i; // https://regex101.com/r/JwS9rI/1
-  var ytid  = yturl.match(regex);
-
-  if(ytid){
-    if(ytid[2].length == 11) {
-      player.loadVideoById(ytid[2], 0);
-      videoId = ytid[2]
-      $(".player-timing input").val('0:00:00.0');
-    } else {
-      alert('Invalid YouTube ID! Please verify the link again.');
-    }
-  } else {
-    alert('Invalid YouTube URL! Please copy the link again.');
-  }
-  });
-});    
-*/
