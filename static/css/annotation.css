@@ -481,12 +481,80 @@ button#slider-start-prev:active, button#slider-end-prev:active {
 /* Change la couleur des points de départ et de fin (les poignées) */
 .irs--flat .irs-from, .irs--flat .irs-to, .irs--flat .irs-single {
   background-color: #1da4ec; 
+}
 
 /* Change la couleur du texte des labels (par exemple, les valeurs affichées au-dessus du slider) */
 .irs--flat .irs-min, .irs--flat .irs-max, .irs--flat .irs-from, .irs--flat .irs-to, .irs--flat .irs-single {
   color: #FFFFFF; /* Texte en blanc */
 }
 
+/* Styles pour les boutons */
+button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
+
+/* Styles pour la classe "btn-submit" */
+.btn-submit {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Styles au survol de la classe "btn-submit" */
+.btn-submit:hover {
+  background-color: #45a049;
+}
+
+/* Styles pour la classe "btn-upload" */
+.btn-upload {
+  background-color: #008CBA;
+  color: white;
+}
+
+/* Styles au survol de la classe "btn-upload" */
+.btn-upload:hover {
+  background-color: #006080;
+}
+
+/* Styles pour la classe "btn-download" */
+.btn-download {
+  background-color: #f44336;
+  color: white;
+}
+
+/* Styles au survol de la classe "btn-download" */
+.btn-download:hover {
+  background-color: #d32f2f;
+}
+
+/* Styles pour la classe "btn-choose-file" */
+.btn-choose-file {
+  display: block;
+  margin-top: 10px;
+  color: #333;
+  font-size: 16px;
+}
+
+/* Styles au survol de la classe "btn-choose-file" */
+.btn-choose-file:hover {
+  color: #008CBA;
+}
+
+form#videoUploadForm input[type="file"] {
+  display: none;
+}
+
+form#videoUploadForm button[type="button"] {
+  background-color: #3498db;
+  color: white;
+  padding: 10px 20px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+}
 
 
 
