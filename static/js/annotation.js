@@ -133,10 +133,13 @@ function onPlayerReady() {
         limit_filter(data)
       },
       onChange: function (data) {
+        
+        updateDurationDisplay(data.to - data.from);
         limit_filter(data)
         $("#startTime").val(data.from);
         // Update the end time input field
         $("#endTime").val(data.to);
+        
       },
       onFinish: function (data) {
         if(data.to > data.from){
@@ -195,30 +198,35 @@ function onPlayerReady() {
           var from = d5_instance.old_from - step;
           var to = d5_instance.old_to;
           seek(from);
+          $d5.trigger('change');
         }
 
         if (e.target.id == "slider-start-next" && duration.toFixed(1) <= max_interval) {
           var from = d5_instance.old_from + step;
           var to = d5_instance.old_to;
           seek(from);
+          $d5.trigger('change');
         }
 
         if (e.target.id == "slider-next" && duration.toFixed(1) < max_interval) {
           var from = d5_instance.old_from;
           var to = d5_instance.old_to + step;
           seek(to);
+          $d5.trigger('change');
         }
 
         if (e.target.id == "slider-end-prev" && duration.toFixed(1) <= max_interval) {
           var from = d5_instance.old_from;
           var to = d5_instance.old_to - step;
           seek(to);
+          $d5.trigger('change');
         }
 
         d5_instance.update({
           from: from,
           to: to
         })
+        
 
         setTimeout(loop, 125)
       })();
@@ -233,6 +241,31 @@ function onPlayerReady() {
     date.setSeconds(timeInSeconds);
     return date.toISOString().substr(11, 8);
   }
+}
+
+function updateDurationDisplay(duration) {
+  let formattedDuration = hhmmsss_prettify(duration);
+  $("#ytduration").text(formattedDuration);
+}
+function onPlayerStateChange(event) {
+  if (event.data === YT.PlayerState.PLAYING) {
+    var maxDuration = player.getDuration();
+    var $d5 = $("#range-slider");
+
+    // Update the max value of the ionRangeSlider
+    $d5.data("ionRangeSlider").update({ max: maxDuration });
+  }
+}
+
+function handleYouTubePlayerChange(videoId) {
+  // Destroy the existing player
+  player.destroy();
+  
+  // Initialize the player with the new videoId
+  onYouTubeIframeAPIReady(videoId);
+
+  // Call the onPlayerReady function again to apply settings and event handlers
+  onPlayerReady();
 }
   /*$d5_buttons.on("change", function() {
     $("#startTime").val(formatTime(d5_instance.old_from));
@@ -345,6 +378,7 @@ $(function(){
           // Handle success response if needed
           console.log(response);
           player.loadVideoById(ytid[2]);
+          //handleYouTubePlayerChange(ytid[2])
         },
         error: function(xhr, status, error) {
           // Handle error response if needed

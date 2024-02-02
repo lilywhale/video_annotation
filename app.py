@@ -4,6 +4,7 @@ import secrets
 import random
 import os
 import json
+import re
 from io import BytesIO
 from zipfile import ZipFile, ZIP_DEFLATED
 import pathlib
@@ -28,7 +29,7 @@ app.config['MYSQL_DB'] = 'new_schema'"""
 
 @app.route('/')
 def home():
-    return render_template('Connexion.html')
+    return render_template('NewAnnotation.html')
 
 
 @app.route('/create_account', methods=['POST'])
@@ -119,7 +120,7 @@ def annotation():
     return render_template('NewAnnotation.html')
 
 
-@app.route('/myvideos.html')
+"""@app.route('/myvideos.html')
 def myvideos(): 
     # Liste les fichiers dans le dossier
     video_files = [f for f in os.listdir("./static/video") if os.path.isfile(os.path.join("./static/video", f))]
@@ -195,10 +196,17 @@ def delete_video(video_name):
 
 @app.route('/annotate_video/<video_name>')
 def annotate_video(video_name):
-    return render_template('NewAnnotation.html', video_name=video_name)
+    return render_template('NewAnnotation.html', video_name=video_name)"""
 
 
-# upload video
+def sanitize_title(title):
+    # Define a regular expression pattern to match special characters
+    pattern = r'[^\w\s]'
+    # Replace special characters with an empty string
+    sanitized_title = re.sub(pattern, '', title)
+    return sanitized_title
+
+
 @app.route('/upload_video_desktop_app', methods=['POST'])
 def upload_video_desktop_app():
     """# Get the uploaded file from the request
@@ -208,18 +216,18 @@ def upload_video_desktop_app():
     session['current_video'] = video_file.filename
     """
     video_file = request.files['videoFile']
-    
-    video_file.save("static/video/" + video_file.filename)
+    filename = sanitize_title(video_file.filename)
+    video_file.save("static/video/" + filename)
     # video_file.save("static/video/" + video_file.filename.split(".")[0] + "/" + video_file.filename)
-    session['current_video'] = video_file.filename
+    session['current_video'] = filename
 
     # Print the file name to the console for debugging
-    print("Uploaded Video File Name:", video_file.filename)
+    print("Uploaded Video File Name:", filename)
 
     # Call the upload_video_desktop_app.py script with the file path
     # Include the --file argument properly
     script_path = 'upload_video/upload_video_desktop_app.py'
-    os.system(f'python {script_path} --file="static/video/{video_file.filename}" --title="{video_file.filename}" --description="Test to upload a video on youtube"  --keywords="python, programming" --category="28"  --privacyStatus="unlisted"')
+    os.system(f'python {script_path} --file="static/video/{filename}" --title="{filename}" --description="Test to upload a video on youtube"  --keywords="python, programming" --category="28"  --privacyStatus="unlisted"')
 
     return 'Video uploaded successfully!'
 
@@ -292,7 +300,7 @@ def submit_annotation():
 
     return jsonify({'message': 'Annotation enregistrée'}), 200
 
-
+"""
 @app.route('/process_slider_values', methods=['POST'])
 def process_slider_values():
     data = request.get_json()
@@ -303,7 +311,7 @@ def process_slider_values():
     # Process the start and end timeframes as needed
     # You can perform any further processing or logic here
 
-    return jsonify({'message': 'Slider values received successfully'})
+    return jsonify({'message': 'Slider values received successfully'})"""
 
 
 @app.route('/process_url', methods=['POST'])
@@ -314,21 +322,31 @@ def process_url():
         video_url = request.form['url']
 
         yt = YouTube(video_url)
-        filename = yt.title
-        print(type(filename))
-        print(filename)
-        stream = yt.streams.get_by_itag(22)
+        filename = sanitize_title(yt.title) + '.mp4'  # Sanitize the title and add .mp4 extension
 
-        # Download the stream to a file
-        stream.download(output_path="static/video/")
-        print('session 1')
-        session['current_video'] = '.mp4'
-        print(session['current_video'])
+        # Get the list of files in the directory
+        video_files = os.listdir("static/video")
 
-        session['current_video'] = filename + '.mp4'
-        print(session['current_video'])
+        # Check if the filename exists in the list of files
+        if filename not in video_files:
+            stream = yt.streams.get_by_itag(22)
+            print(type(filename))
+            print(filename)
+            stream = yt.streams.get_by_itag(22)
+
+            # Download the stream to a file
+            stream.download(output_path="static/video/", filename=filename)
+
+            session['current_video'] = filename 
+            print(session['current_video'])
+            print("video downloaded")
+        else:
+            session['current_video'] = filename 
+            print(session['current_video'])
+            print("video already here")
 
     return jsonify({'message': 'Video loaded successfully'}), 200
+
 
 @app.route('/download_data', methods=['GET'])
 def download_data():
