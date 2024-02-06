@@ -1,0 +1,144 @@
+@import url(https://fonts.googleapis.com/css?family=Nunito);
+@import url('https://fonts.googleapis.com/css?family=Orbitron:400,500&display=swap');
+
+/* Global Styles */
+body {
+  background: #000;
+  font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  color: #FFF;
+}
+
+/* Page Specific Styles */
+.upload-btn-wrapper {
+  margin-bottom: 20px;
+}
+
+.upload-btn-wrapper input[type=file] {
+  display: none;
+}
+.Upload{
+    margin-left: 900px;
+    margin-top: -110px;
+  }
+
+.btn-download {
+  display: block;
+  width: 200px; /* Adjust button width as needed */
+  margin-bottom: 20px;
+  background-color: #007bff; /* Set button background color */
+  color: white;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.btn-download:hover {
+  background-color: #0056b3; /* Change background color on hover */
+}
+
+table {
+  width: 100%;
+  border-collapse: collapse;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: white; /* Set table background color */
+  color: black; /* Set table text color */
+}
+
+th {
+  background-color: #343a40; /* Set table header background color */
+  color: white;
+  padding: 15px;
+  text-align: left;
+}
+
+td {
+  padding: 15px;
+  text-align: left;
+  border-top: 1px solid #dee2e6;
+}
+
+.dropdown-menu {
+  background-color: #343a40; /* Set dropdown menu background color */
+}
+
+.dropdown-item {
+  color: white;
+}
+
+.dropdown-item:hover {
+  background-color: #007bff; /* Change background color on hover */
+  color: white;
+}
+
+.wrap {
+  padding: 0; /*20px 0*/
+  margin: 0 auto;
+}
+
+.wrap button {
+  font-weight: bolder;
+  font-size: 22px;
+  background: #000;
+  color: #0ebeff;
+  border: 1px solid;
+  width: 100%;
+  cursor: pointer;
+  padding: 0 5px;
+  line-height: 40px;
+  -webkit-transition: background-color .2s ease-out;
+  -moz-transition: background-color .2s ease-out;
+  -o-transition: background-color .2s ease-out;
+  transition: background-color .2s ease-out;
+}
+
+.wrap button:nth-child(2n+1) {
+  margin-right: 6px;
+} 
+
+.wrap button:hover {
+  background-color: #2bcdee29;
+}
+
+button#slider-start-next:active,
+button#slider-next:active {
+  transform: translateX(4px);
+}
+
+button#slider-start-prev:active,
+button#slider-end-prev:active {
+  transform: translateX(-4px);
+}
+
+/* Styles pour les boutons */
+button {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    border: none;
+    border-radius: 5px;
+  }
+  
+  /* Styles pour la classe "btn-submit" */
+  .btn-submit {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  /* Styles au survol de la classe "btn-submit" */
+  .btn-submit:hover {
+    background-color: #45a049;
+  }
+  
+  /* Styles pour la classe "btn-upload" */
+  .btn-upload {
+    background-color: #008CBA;
+    color: white;
+  }
+  
+  /* Styles au survol de la classe "btn-upload" */
+  .btn-upload:hover {
+    background-color: #006080;
+  }
+

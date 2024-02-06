@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for,send_file, jsonify
-# import mysql.connector
+import mysql.connector
 import secrets
 import random
 import os
@@ -21,15 +21,15 @@ app.secret_key = secrets.token_hex(16)  # Generate a 32-character secret key
 ALLOWED_EXTENSIONS = ['mp4']
 
 """
-app.config['MYSQL_HOST'] = 'database-1.cczbiwiljwho.eu-north-1.rds.amazonaws.com'    # Replace with your MySQL server host
-app.config['MYSQL_USER'] = 'admin'    # Replace with your MySQL username
-app.config['MYSQL_PASSWORD'] = 'Emploitemps10#'    # Replace with your MySQL password
+app.config['MYSQL_HOST'] = 'database-1.cczbiwiljwho.eu-north-1.rds.amazonaws.com'
+app.config['MYSQL_USER'] = 'admin'
+app.config['MYSQL_PASSWORD'] = 'Emploitemps10#'
 app.config['MYSQL_DB'] = 'new_schema'"""
 
 
 @app.route('/')
 def home():
-    return render_template('NewAnnotation.html')
+    return render_template('My_videos.html')
 
 
 @app.route('/create_account', methods=['POST'])
@@ -115,12 +115,12 @@ def index():
     return render_template('index.html')
 
 
-@app.route('/annotation.html')
+@app.route('/annotation_youtube')
 def annotation():
     return render_template('NewAnnotation.html')
 
 
-"""@app.route('/myvideos.html')
+@app.route('/myvideos.html')
 def myvideos(): 
     # Liste les fichiers dans le dossier
     video_files = [f for f in os.listdir("./static/video") if os.path.isfile(os.path.join("./static/video", f))]
@@ -171,7 +171,8 @@ def upload_video():
     if video and allowed_file(video.filename):
         filename = secure_filename(video.filename.replace(" ", "_"))
         video.save('static/video/' + filename)
-        return render_template('NewAnnotation.html', video_name=filename) 
+        session['current_video'] = filename
+        return render_template('NewAnnotationLocal.html', video_name=filename)
     return "invalid video"
 
 
@@ -196,7 +197,7 @@ def delete_video(video_name):
 
 @app.route('/annotate_video/<video_name>')
 def annotate_video(video_name):
-    return render_template('NewAnnotation.html', video_name=video_name)"""
+    return render_template('NewAnnotationLocal.html', video_name=video_name)
 
 
 def sanitize_title(title):

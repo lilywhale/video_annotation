@@ -38,7 +38,6 @@
           <button type="button" onclick="uploadVideo()" class="btn btn-upload">Upload</button>
         </form>
     </div>
-
 </section>
 
 
@@ -46,12 +45,16 @@
 
 <div class="layout-container">
   <div class="video-and-slider">
-    <div id="player" class="player">
-      <!-- Le lecteur YouTube s'insère ici -->
-    </div>
-    <div class="slider-container">
-      <input id="range-slider" type="text" name="range" value="" />
-    </div>
+        <div class="video-container">
+            <video id="myVideo" width='840' height='467' controls preload="metadata">
+                <source src="{{ url_for('static', filename='video/' + video_name) }}" type="video/mp4">
+                You need to upload a video or your browser does not support the video tag.
+            </video>
+        </div>
+        
+        <div class="slider-container">
+            <input id="range-slider" type="text" name="range" value="" />
+        </div>
   </div>
   <div class="form-container">
     <!-- Le formulaire s'insère ici -->
@@ -244,5 +247,6 @@
 <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js'></script>
 <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
 <script src="{{ url_for('static', filename='js/annotation.js') }}"></script>
+<script src="{{ url_for('static', filename='js/local_video_script.js') }}"></script>
 </body>
 </html>
