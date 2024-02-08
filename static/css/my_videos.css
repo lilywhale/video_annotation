@@ -1,144 +1,137 @@
-@import url(https://fonts.googleapis.com/css?family=Nunito);
-@import url('https://fonts.googleapis.com/css?family=Orbitron:400,500&display=swap');
-
-/* Global Styles */
 body {
   background: #000;
-  font-family: "Droid Sans Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
   color: #FFF;
 }
 
-/* Page Specific Styles */
-.upload-btn-wrapper {
-  margin-bottom: 20px;
+.card {
+      max-width: 400px;
+      margin: 0 auto;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+h2 {
+    text-align: center;
+    font-size: 2em;
+    color: #333; /* You can adjust the color to your liking */
+    text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+    font-family : Rubik;/* Adds a subtle shadow effect */
+    /* You can add more styles such as font-family, font-weight, etc. to customize further */
+    color: white;
 }
+    .card-body {
+      padding: 2rem;
+    }
 
-.upload-btn-wrapper input[type=file] {
-  display: none;
-}
-.Upload{
-    margin-left: 900px;
-    margin-top: -110px;
-  }
+    .form-group label {
+      font-weight: bold;
+    }
 
-.btn-download {
-  display: block;
-  width: 200px; /* Adjust button width as needed */
-  margin-bottom: 20px;
-  background-color: #007bff; /* Set button background color */
-  color: white;
+    .btn-primary {
+      width: 100%;
+    }
+    @media (min-width: 768px) {
+      .col-md-6 {
+        flex: 0 0 50%;
+        max-width: 50%;
+      }
+    }
+   
+
+    table {
+        width: 100%;
+        border-collapse: separate;
+        border-spacing: 0 10px;
+        border-radius: 10px;
+        overflow: hidden;
+        background-color: #1da4ec;
+        opacity:80%;
+    }
+
+    th, td {
+        padding: 15px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #343a40;
+        color: white;
+    }
+
+    td {
+        border-top: 1px solid #dee2e6;
+        font-weight: bold;
+    }
+
+    input[type="checkbox"] {
+        margin: 0;
+    }
+    button {
+  padding: 10px 20px;
+  font-size: 16px;
+  cursor: pointer;
   border: none;
-  padding: 10px;
   border-radius: 5px;
+}
+
+/* Styles pour la classe "btn-submit" */
+.btn-submit {
+  background-color: #4CAF50;
+  color: white;
+}
+
+/* Styles au survol de la classe "btn-submit" */
+.btn-submit:hover {
+  background-color: #45a049;
+}
+
+/* Styles pour la classe "btn-upload" */
+.btn-upload {
+  background-color: #008CBA;
+  color: white;
+}
+ .top-bar {
+            background-color: #333; /* Background color of the top bar */     opacity:80%;
+            color: #fff; /* Text color */
+            padding: 10px; /* Padding around content */
+            display: flex; /* Use flexbox for layout */
+            justify-content: space-between; /* Space items evenly */
+            align-items: center; /* Center items vertically */
+        }
+
+        /* Style for the image in the top bar */
+        .top-bar img {
+            height: 40px; /* Adjust the height of the image */
+            vertical-align: middle; /* Align the image vertically */
+        }
+
+        /* Style for the link in the top bar */
+        .top-bar a {
+            color:  #1da4ec; /* Link text color */
+            text-decoration: none; /* Remove underline */
+            font-weight: bold; /* Make the link text bold */
+            opacity:100%;
+        }
+
+/* Styles for the upload button */
+.Upload button[type="submit"] {
+  background-color: #008CBA; /* Use the same color as the "btn-upload" class */
+  color: white;
+  padding: 10px 20px;
+  font-size: 16px;
   cursor: pointer;
+  border: none;
+  border-radius: 5px;
 }
 
-.btn-download:hover {
-  background-color: #0056b3; /* Change background color on hover */
+/* Hover styles for the upload button */
+.Upload button[type="submit"]:hover {
+  background-color: #005f7f; /* Darker shade of blue */
 }
-
-table {
-  width: 100%;
-  border-collapse: collapse;
-  border-radius: 10px;
-  overflow: hidden;
-  background-color: white; /* Set table background color */
-  color: black; /* Set table text color */
+.thumbnail-cell {
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
-
-th {
-  background-color: #343a40; /* Set table header background color */
-  color: white;
-  padding: 15px;
-  text-align: left;
+.thumbnail-cell img {
+  max-width: 100%;
+  max-height: 100%;
 }
-
-td {
-  padding: 15px;
-  text-align: left;
-  border-top: 1px solid #dee2e6;
-}
-
-.dropdown-menu {
-  background-color: #343a40; /* Set dropdown menu background color */
-}
-
-.dropdown-item {
-  color: white;
-}
-
-.dropdown-item:hover {
-  background-color: #007bff; /* Change background color on hover */
-  color: white;
-}
-
-.wrap {
-  padding: 0; /*20px 0*/
-  margin: 0 auto;
-}
-
-.wrap button {
-  font-weight: bolder;
-  font-size: 22px;
-  background: #000;
-  color: #0ebeff;
-  border: 1px solid;
-  width: 100%;
-  cursor: pointer;
-  padding: 0 5px;
-  line-height: 40px;
-  -webkit-transition: background-color .2s ease-out;
-  -moz-transition: background-color .2s ease-out;
-  -o-transition: background-color .2s ease-out;
-  transition: background-color .2s ease-out;
-}
-
-.wrap button:nth-child(2n+1) {
-  margin-right: 6px;
-} 
-
-.wrap button:hover {
-  background-color: #2bcdee29;
-}
-
-button#slider-start-next:active,
-button#slider-next:active {
-  transform: translateX(4px);
-}
-
-button#slider-start-prev:active,
-button#slider-end-prev:active {
-  transform: translateX(-4px);
-}
-
-/* Styles pour les boutons */
-button {
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-  }
-  
-  /* Styles pour la classe "btn-submit" */
-  .btn-submit {
-    background-color: #4CAF50;
-    color: white;
-  }
-  
-  /* Styles au survol de la classe "btn-submit" */
-  .btn-submit:hover {
-    background-color: #45a049;
-  }
-  
-  /* Styles pour la classe "btn-upload" */
-  .btn-upload {
-    background-color: #008CBA;
-    color: white;
-  }
-  
-  /* Styles au survol de la classe "btn-upload" */
-  .btn-upload:hover {
-    background-color: #006080;
-  }
-

@@ -7,6 +7,7 @@
   <title>TennisInsight</title>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/meyer-reset/2.0/reset.min.css">
   <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/css/ion.rangeSlider.min.css'>
+  <!--<link rel='stylesheet' href='https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'>-->
   <link rel="stylesheet" href="{{ url_for('static', filename='css/annotation.css') }}">
 
 </head>
@@ -164,6 +165,30 @@
     <button type="submit" class="btn-download">Download Data</button>
   </form>
 
+  <h2>Liste des annotations</h2>
+  
+  <table>
+    <thead>
+        <tr>
+          <th>index</th>
+          <th>Player Name</th>
+          <th>Score After</th>
+          <th>Start Time</th>
+          <th>End Time</th>
+          <th>Incoming Shot</th>
+          <th>Incoming Type</th>
+          <th>Outgoing Type</th>
+          <th>Outgoing Shot</th>
+          <th>Point Finish</th>
+          <th>Position</th>
+          <th>Settings</th>
+        </tr>
+    </thead>
+    <tbody>
+        <!-- Table rows will be dynamically added here -->
+    </tbody>
+</table>
+
   <!-- (Modification)  -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -186,11 +211,60 @@
                         timer: 2000  // 2 seconds
                     }).then(function () {
                         annotationForm.reset();
+
+                        // Fetch annotations after form submission
+                        fetchAnnotations();
                     });
                 }
             };
             xhr.send(formData);
         });
+
+        // Function to fetch annotations from the server
+        function fetchAnnotations() {
+            var xhrAnnotations = new XMLHttpRequest();
+            xhrAnnotations.open('GET', '/get_annotations', true);
+            xhrAnnotations.onload = function () {
+                if (xhrAnnotations.status == 200) {
+                    var annotationData = JSON.parse(xhrAnnotations.responseText);
+                    updateTable(annotationData);
+                }
+            };
+            xhrAnnotations.send();
+        }
+
+        // Function to update HTML table with new data
+        function updateTable(annotationData) {
+            var tableBody = document.querySelector('tbody');
+            tableBody.innerHTML = '';
+
+            // Rebuild table rows with new data
+            annotationData.forEach(function (annotation, index) {
+                var row = '<tr>';
+                row += '<td>' + index + '</td>'; // Add the index
+                row += '<td>' + annotation.playerName + '</td>';
+                row += '<td>' + annotation.scoreAfter + '</td>';
+                row += '<td>' + annotation.startTime + '</td>';
+                row += '<td>' + annotation.endTime + '</td>';
+                row += '<td>' + annotation.incomingShot + '</td>';
+                row += '<td>' + annotation.incomingType + '</td>';
+                row += '<td>' + annotation.outgoingType + '</td>';
+                row += '<td>' + annotation.outgoingShot + '</td>';
+                row += '<td>' + annotation.pointFinish + '</td>';
+                row += '<td>' + annotation.position + '</td>';
+                row += '<div class="dropdown">';
+                row += '<button class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton_' + index + '" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">&#8285;</button>';
+                row += '<div class="dropdown-menu" aria-labelledby="dropdownMenuButton_' + index + '">';
+                row += '<a class="dropdown-item" href="' + annotation.deleteUrl + '">Delete</a>';
+                row += '<a class="dropdown-item" href="' + annotation.modifyUrl + '">Modify</a>';
+                row += '</div></div></td>';
+                row += '</tr>';
+                tableBody.innerHTML += row;
+            });
+        }
+
+        // Fetch annotations when the page loads
+        fetchAnnotations();
     });
 </script>
   
@@ -243,6 +317,8 @@
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js'></script>
 <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
+<!--<script type="text/javascript"  src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>-->
 <script src="{{ url_for('static', filename='js/annotation.js') }}"></script>
 </body>
 </html>

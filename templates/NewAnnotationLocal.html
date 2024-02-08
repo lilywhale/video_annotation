@@ -21,23 +21,7 @@
     <div class="desc">
         <h1>TennisInsight</h1>
     </div>
-
-    <div class="form">
-        <form action="/process_url" method="POST">
-            <input class="url form__field" type="text" name="url" autocomplete="off" value="" placeholder="Paste the youtube video link here">
-            <button type="submit" class="btn btn--primary btn--inside">Process</button>
-        </form>
-    </div>
-
-    <div class="Upload">
-      <!-- Upload video  -->
-        <form id="videoUploadForm" action="/upload_video_desktop_app" method="post" enctype="multipart/form-data">
-          <label for="videoFile" class="btn-choose-file">Select Video File:</label>
-          <input type="file" id="videoFile" name="videoFile" accept="video/*" required><br>
-
-          <button type="button" onclick="uploadVideo()" class="btn btn-upload">Upload</button>
-        </form>
-    </div>
+  
 </section>
 
 
@@ -46,7 +30,7 @@
 <div class="layout-container">
   <div class="video-and-slider">
         <div class="video-container">
-            <video id="myVideo" width='840' height='467' controls preload="metadata">
+            <video id="myVideo" width='1100' height='610' controls preload="metadata">
                 <source src="{{ url_for('static', filename='video/' + video_name) }}" type="video/mp4">
                 You need to upload a video or your browser does not support the video tag.
             </video>
@@ -198,55 +182,10 @@
 </script>
   
 
-
-<!-- Upload video -->
-<script>
-    function uploadVideo() {
-        var videoInput = document.getElementById('videoFile');
-        var file = videoInput.files[0];
-
-        // Check if a file is selected
-        if (!file) {
-            alert("Please select a video file.");
-            return;
-        }
-
-        // Prepare the FormData for the AJAX request
-        var formData = new FormData();
-        formData.append('videoFile', file);
-
-        // Make an AJAX request to upload_video_desktop_app.py
-        $.ajax({
-            url: '/upload_video_desktop_app',
-            type: 'POST',
-            data: formData,
-            processData: false,
-            contentType: false,
-            success: function(response) 
-            {
-
-              // Extract the videoId from the response if available
-              var videoId = response.link;
-             
-              alert("Video uploaded successfully! link: https://www.youtube.com/watch?v=: " + videoId);
-
-              // Update the URL with the new videoId
-              if (videoId) {
-                  window.location.href = updateUrlParameter(window.location.href, 'videoId', videoId);
-              }
-            },
-            error: function(error) {
-                alert("Error uploading video. Please try again.");
-            }
-        });
-    }
-</script>
-
-
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js'></script>
 <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-<script src="{{ url_for('static', filename='js/annotation.js') }}"></script>
+<!--<script src="{{ url_for('static', filename='js/annotation.js') }}"></script>-->
 <script src="{{ url_for('static', filename='js/local_video_script.js') }}"></script>
 </body>
 </html>

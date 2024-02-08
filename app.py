@@ -29,7 +29,7 @@ app.config['MYSQL_DB'] = 'new_schema'"""
 
 @app.route('/')
 def home():
-    return render_template('My_videos.html')
+    return render_template('Connexion.html')
 
 
 @app.route('/create_account', methods=['POST'])
@@ -128,14 +128,14 @@ def myvideos():
     video_info = []
 
     for video_file in video_files:
-        video_path = os.path.join("./static/video", video_file)
+        video_path = "./static/video/" + video_file
         print(video_path)
         clip = VideoFileClip(video_path)
         duration = round(round(clip.duration, 0) / 60, 2)
         fps = clip.fps
         size = clip.size
-        thumbnail_path = get_video_thumbnail(video_path)
-        thumbnail_path = thumbnail_path.split("/")[1]
+        thumbnail_path = get_video_thumbnail(video_path).split("/")[2]
+        # thumbnail_path = thumbnail_path.split("/")[1]
         video_info.append({
             'file_name': video_file,
             'duration': duration,
@@ -152,7 +152,12 @@ def get_video_thumbnail(video_path):
     clip = VideoFileClip(video_path)
     frame = clip.get_frame(15)
     thumbnail = Image.fromarray(frame)
+    print(video_path)
+    print(os.path.basename(video_path).rsplit('.', 1)[0])
+    #thumbnail_path = 'static/thumbnails/' + video_path.split('/')[3] + '.png'
     thumbnail_path = os.path.join('static/thumbnails', os.path.basename(video_path).rsplit('.', 1)[0] + '.png')
+    thumbnail_path = thumbnail_path.replace('\\', '/')
+    print(thumbnail_path)
     thumbnail.save(thumbnail_path)
     return thumbnail_path
 
@@ -301,18 +306,60 @@ def submit_annotation():
 
     return jsonify({'message': 'Annotation enregistrée'}), 200
 
-"""
-@app.route('/process_slider_values', methods=['POST'])
-def process_slider_values():
-    data = request.get_json()
-    start_time = data['startTime']
-    end_time = data['endTime']
-    print(start_time)
-    print(end_time)
-    # Process the start and end timeframes as needed
-    # You can perform any further processing or logic here
 
-    return jsonify({'message': 'Slider values received successfully'})"""
+@app.route('/get_annotations', methods=['GET'])
+def get_annotations():
+    # Fetch the DataFrame from session
+    df_annotation_json = session.get('df_annotation')
+    if df_annotation_json is None:
+        # If df_annotation_json is None, return an empty list
+        return jsonify([])
+    else:
+        df_annotation = pd.read_json(df_annotation_json)
+        # Convert DataFrame to JSON and return
+        annotation_data = df_annotation.to_dict(orient='records')
+        return jsonify(annotation_data)
+
+
+@app.route('/update_annotation/<int:annotation_id>', methods=['POST'])
+def update_annotation(annotation_id):
+    # Retrieve the modified data from the request
+    modified_data = request.get_json()
+
+    # Replace the following with your actual logic to update the annotation data
+    try:
+        # Load the existing dataframe from the session
+        df_annotation_json = session.get('df_annotation')
+        if df_annotation_json is None:
+            return jsonify({'error': 'No annotation data available'}), 404
+
+        df_annotation = pd.read_json(df_annotation_json)
+
+        # Locate the row with the specified annotation_id
+        index_to_update = df_annotation[df_annotation['annotationId'] == annotation_id].index
+
+        if not index_to_update.empty:
+            # Update the dataframe with the modified data
+            df_annotation.loc[index_to_update, 'playerName'] = modified_data.get('playerName', '')
+            df_annotation.loc[index_to_update, 'scoreAfter'] = modified_data.get('scoreAfter', '')
+            df_annotation.loc[index_to_update, 'startTime'] = modified_data.get('startTime', '')
+            df_annotation.loc[index_to_update, 'endTime'] = modified_data.get('endTime', '')
+            df_annotation.loc[index_to_update, 'incomingShot'] = modified_data.get('incomingShot', '')
+            df_annotation.loc[index_to_update, 'incomingType'] = modified_data.get('incomingType', '')
+            df_annotation.loc[index_to_update, 'outgoingType'] = modified_data.get('outgoingType', '')
+            df_annotation.loc[index_to_update, 'outgoingShot'] = modified_data.get('outgoingShot', '')
+            df_annotation.loc[index_to_update, 'pointFinish'] = modified_data.get('pointFinish', '')
+            df_annotation.loc[index_to_update, 'position'] = modified_data.get('position', '')
+
+            # Save the updated dataframe back to the session
+            session['df_annotation'] = df_annotation.to_json()
+
+            return jsonify({'message': 'Annotation updated successfully'}), 200
+        else:
+            return jsonify({'error': 'Annotation not found'}), 404
+
+    except Exception as e:
+        return jsonify({'error': f'Error updating annotation data: {str(e)}'}), 500
 
 
 @app.route('/process_url', methods=['POST'])
@@ -324,7 +371,7 @@ def process_url():
 
         yt = YouTube(video_url)
         filename = sanitize_title(yt.title) + '.mp4'  # Sanitize the title and add .mp4 extension
-
+        session.pop('df_annotation', None)
         # Get the list of files in the directory
         video_files = os.listdir("static/video")
 
@@ -381,4 +428,4 @@ def download_data():
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(port=3000, debug=True)

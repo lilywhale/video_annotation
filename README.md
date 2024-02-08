@@ -1,2 +1,2 @@
 # video_annotation
-master project
+Engineering project
