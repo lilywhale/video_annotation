@@ -1,5 +1,4 @@
 from flask import Flask, render_template, request, session, redirect, url_for,send_file, jsonify
-import mysql.connector
 import secrets
 import random
 import os

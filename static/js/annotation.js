@@ -391,3 +391,29 @@ $(function(){
   });
 });
 
+
+/***************************************************/
+// Modification
+
+$(function() {
+  $("#slider-start-prev, #slider-start-next, #slider-end-prev, #slider-next").on("click", function() {
+    // Récupérez les valeurs actuelles des champs de temps
+    var startTimeInput = $("#startTime");
+    var endTimeInput = $("#endTime");
+    var startTime = parseFloat(startTimeInput.val());
+    var endTime = parseFloat(endTimeInput.val());
+
+    // Mettez à jour les valeurs en fonction du bouton cliqué
+    if ($(this).attr("id") === "slider-start-prev" || $(this).attr("id") === "slider-start-next") {
+      startTime = d5_instance.old_from;
+      endTime = d5_instance.old_to;
+    } else {
+      startTime = d5_instance.old_from;
+      endTime = d5_instance.old_to;
+    }
+
+    // Mettez à jour les champs de temps dans le formulaire
+    startTimeInput.val(startTime);
+    endTimeInput.val(endTime);
+  });
+});
