@@ -1,4 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for,send_file, jsonify
+from flask_mysqldb import MySQL
 import secrets
 import random
 import os
@@ -19,11 +20,12 @@ app.secret_key = secrets.token_hex(16)  # Generate a 32-character secret key
 
 ALLOWED_EXTENSIONS = ['mp4']
 
-"""
-app.config['MYSQL_HOST'] = 'database-1.cczbiwiljwho.eu-north-1.rds.amazonaws.com'
-app.config['MYSQL_USER'] = 'admin'
-app.config['MYSQL_PASSWORD'] = 'Emploitemps10#'
-app.config['MYSQL_DB'] = 'new_schema'"""
+
+app.config['MYSQL_HOST'] = 'localhost'
+app.config['MYSQL_USER'] = 'root'
+app.config['MYSQL_PASSWORD'] = 'passwordsql'
+app.config['MYSQL_DB'] = 'engineering_project'
+mysql = MySQL(app)
 
 
 @app.route('/')
@@ -41,42 +43,36 @@ def create_account():
     user_id = random.randint(1, 1000)
 
     # Insert the user into the database with the assigned user ID
-    """insert_user_query = "INSERT INTO users (id, name, email, password) VALUES (%s, %s, %s, %s)"
-    user_data = (user_id, name, email, password)
+    insert_user_query = "INSERT INTO users (idUsers, login, password) VALUES ( %s, %s, %s)"
+    user_data = (user_id, email, password)
 
-     try:
+    try:
         # Establish a connection to the MySQL database
-        cnx = mysql.connector.connect(
-            host=app.config['MYSQL_HOST'],
-            user=app.config['MYSQL_USER'],
-            password=app.config['MYSQL_PASSWORD'],
-            database=app.config['MYSQL_DB']
-        )
+        cur = mysql.connection.cursor()
+        cur.execute(insert_user_query, user_data)
+        mysql.connection.commit()  # Commit the transaction
 
-        # Create a cursor to execute the SQL query
-        cursor = cnx.cursor()
+        cur.close()
 
-        # Execute the insert query
-        cursor.execute(insert_user_query, user_data)
+        session['user_id'] = user_id  # Store user ID in session
 
-        # Commit the changes to the database
-        cnx.commit()
+        # Redirect to the 'myvideos.html' route
+        return redirect('/myvideos.html')
 
-        # Close the cursor and database connection
-        cursor.close()
-        cnx.close()
-        session['user_id'] = user_id
+    except Exception as e:
+        # Handle database errors
+        print("An error occurred:", e)
+        return render_template('Connexion.html')
 
-        # Redirect to a success page or perform any other necessary actions
-        return render_template('Start.html')
-    except mysql.connector.Error as error:
-        # Handle the database error
-        print("Error inserting user into the database:", error)
 
-        # Redirect to an error page or perform error handling
-        return render_template('Connexion.html')"""
-    print(email)
-    print(password)
+@app.errorhandler(404)
+def page_not_found(error):
+    return "Page not found. Please check the URL and try again.", 404
+
+
+@app.errorhandler(500)
+def internal_server_error(error):
+    return "Internal Server Error. Please try again later.", 500    
 
 
 @app.route('/login', methods=['POST'])
@@ -85,27 +81,32 @@ def login():
     email = request.form.get('email')
     password = request.form.get('password')
 
-    # Connect to the database
-    cnx = mysql.connector.connect(host=app.config['MYSQL_HOST'], user=app.config['MYSQL_USER'], password=app.config['MYSQL_PASSWORD'], database=app.config['MYSQL_DB'])
-    cursor = cnx.cursor()
-
-    # Check if the user exists in the database
-    select_user_query = "SELECT * FROM users WHERE email = %s AND password = %s"
+    # Query the database to check if the user exists
+    user_query = "SELECT idUsers, login FROM users WHERE login = %s AND password = %s"
     user_data = (email, password)
-    cursor.execute(select_user_query, user_data)
-    user = cursor.fetchone()
-    # Close the database connection
-    cursor.close()
-    cnx.close()
 
-    if user:
-        # User exists, perform login actions
-        session['user_id'] = user[0]
-        # Redirect to the user's dashboard or perform other actions
-        return redirect(url_for('planning'))
-    else:
-        # User does not exist or invalid credentials
-        return render_template('Connexion.html')
+    try:
+        # Establish a connection to the MySQL database
+        cur = mysql.connection.cursor()
+        cur.execute(user_query, user_data)
+        user = cur.fetchone()  # Fetch the user data from the query result
+
+        cur.close()
+
+        if user:
+            # If the user exists, store user ID and name in session
+            session['user_id'] = user[0]
+            session['user_name'] = user[1]
+
+            # Redirect to the 'myvideos.html' route
+            return redirect('/myvideos.html')
+        else:
+            # If the user does not exist, redirect back to the login page with an error message
+            return redirect('/')
+    except Exception as e:
+        # Handle database errors
+        print("An error occurred:", e)
+        return "An error occurred while logging in. Please try again."
 
 
 
@@ -201,6 +202,7 @@ def delete_video(video_name):
 
 @app.route('/annotate_video/<video_name>')
 def annotate_video(video_name):
+    session['current_video'] = video_name
     return render_template('NewAnnotationLocal.html', video_name=video_name)
 
 
@@ -223,14 +225,11 @@ def upload_video_desktop_app():
     video_file = request.files['videoFile']
     filename = sanitize_title(video_file.filename)
     video_file.save("static/video/" + filename)
-    # video_file.save("static/video/" + video_file.filename.split(".")[0] + "/" + video_file.filename)
     session['current_video'] = filename
 
     # Print the file name to the console for debugging
     print("Uploaded Video File Name:", filename)
 
-    # Call the upload_video_desktop_app.py script with the file path
-    # Include the --file argument properly
     script_path = 'upload_video/upload_video_desktop_app.py'
     os.system(f'python {script_path} --file="static/video/{filename}" --title="{filename}" --description="Test to upload a video on youtube"  --keywords="python, programming" --category="28"  --privacyStatus="unlisted"')
 
@@ -241,10 +240,17 @@ def upload_video_desktop_app():
 def submit_annotation():
 
     if 'df_annotation' not in session:
-        df_annotation = pd.DataFrame(columns=["playerName", "scoreAfter", "startTime", "endTime",
-                                                        "incomingShot", "incomingType", "outgoingType",
-                                                        "outgoingShot", "pointFinish", "position"])
-    else: 
+        df_annotation = pd.DataFrame(columns=["playerName",
+                                              "scoreAfter",
+                                              "startTime",
+                                              "endTime",
+                                              "incomingShot",
+                                              "incomingType",
+                                              "outgoingType",
+                                              "outgoingShot",
+                                              "pointFinish",
+                                              "position"])
+    else:
         df_annotation_json = session.get('df_annotation')
         df_annotation = pd.read_json(df_annotation_json)
         print(type(df_annotation))
@@ -285,9 +291,10 @@ def submit_annotation():
     json_data = json.dumps(annotation_data)
     session['df_annotation'] = json_data
     print(session['current_video'])
-    clip = VideoFileClip("static/video/" + session['current_video'])
+    video_path = "static/video/" + session['current_video']
+    clip = VideoFileClip(video_path)
 
-    # Trim the video to the specified portion
+    # Trim the video 
     trimmed_clip = clip.subclip(start_time, end_time)
 
     # Specify the output file path for the trimmed video
@@ -302,6 +309,34 @@ def submit_annotation():
 
     # Write the trimmed video to the output file
     trimmed_clip.write_videofile(output_path, codec="libx264", fps=24)
+
+    user_id = session.get('user_id')
+    new_row['index'] = last_index
+    new_row['user_id'] = user_id
+    new_row['videoPath'] = video_path
+
+    # Insert the new annotation into the database
+    insert_annotation_query = """
+        INSERT INTO annotations (
+            annotationIndex, playerName, scoreAfter, startTime, endTime, incomingShot, 
+            incomingType, outgoingType, outgoingShot, pointFinish, position, videoPath, idUsers
+        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+    """
+    annotation_data = (
+        new_row['index'], new_row['playerName'], new_row['scoreAfter'], new_row['startTime'],
+        new_row['endTime'], new_row['incomingShot'], new_row['incomingType'], new_row['outgoingType'],
+        new_row['outgoingShot'], new_row['pointFinish'], new_row['position'], new_row['videoPath'], user_id
+    )
+
+    try:
+        # Establish a connection to the MySQL database
+        cur = mysql.connection.cursor()
+        cur.execute(insert_annotation_query, annotation_data)
+        mysql.connection.commit()  # Commit the transaction
+        cur.close()
+    except Exception as e:
+        # Handle database insertion errors
+        print("An error occurred while inserting the annotation into the database:", e)
 
     return jsonify({'message': 'Annotation enregistrée'}), 200
 
@@ -320,45 +355,86 @@ def get_annotations():
         return jsonify(annotation_data)
 
 
-@app.route('/update_annotation/<int:annotation_id>', methods=['POST'])
-def update_annotation(annotation_id):
-    # Retrieve the modified data from the request
-    modified_data = request.get_json()
+@app.route('/update_annotation/<int:annotation_index>', methods=['POST'])
+def update_annotation(annotation_index):
+    if 'df_annotation' not in session:
+        return jsonify({'error': 'No annotations found in session'}), 404
 
-    # Replace the following with your actual logic to update the annotation data
+    df_annotation_json = session.get('df_annotation')
+    df_annotation = pd.read_json(df_annotation_json)
+
+    # Find the row in the DataFrame with the specified annotation_id
+    #row_to_update = df_annotation[df_annotation['index'] == annotation_index].iloc[0]
+    video_path = "static/video/" + session['current_video']
+
+    # Get data from the form
+    player_name = request.form['playerName']
+    score_after = request.form['scoreAfter']
+    start_time = request.form['startTime']
+    end_time = request.form['endTime']
+    incoming_shot = request.form['incomingShot']
+    incoming_type = request.form['incomingType']
+    outgoing_type = request.form['outgoingType']
+    outgoing_shot = request.form['outgoingShot']
+    point_finish = request.form['pointFinish']
+    position = request.form['position']
+
+    # Update the row with new values
+    df_annotation.at[annotation_index, 'playerName'] = player_name
+    df_annotation.at[annotation_index, 'scoreAfter'] = score_after
+    df_annotation.at[annotation_index, 'startTime'] = start_time
+    df_annotation.at[annotation_index, 'endTime'] = end_time
+    df_annotation.at[annotation_index, 'incomingShot'] = incoming_shot
+    df_annotation.at[annotation_index, 'incomingType'] = incoming_type
+    df_annotation.at[annotation_index, 'outgoingType'] = outgoing_type
+    df_annotation.at[annotation_index, 'outgoingShot'] = outgoing_shot
+    df_annotation.at[annotation_index, 'pointFinish'] = point_finish
+    df_annotation.at[annotation_index, 'position'] = position
+
+    # Update the session with the modified DataFrame
+    session['df_annotation'] = df_annotation.to_json()
+
+    # Update the corresponding row in the database
+    update_annotation_query = """
+        UPDATE annotations SET playerName=%s, scoreAfter=%s, startTime=%s, endTime=%s, incomingShot=%s,
+        incomingType=%s, outgoingType=%s, outgoingShot=%s, pointFinish=%s, position=%s
+        WHERE annotationIndex=%s AND videoPath=%s
+    """
+    annotation_data = (
+        player_name, score_after, start_time, end_time, incoming_shot, incoming_type, outgoing_type,
+        outgoing_shot, point_finish, position, annotation_index, video_path
+    )
+
+    clip = VideoFileClip(video_path)
+
+    # Trim the video 
+    trimmed_clip = clip.subclip(start_time, end_time)
+
+    # Specify the output file path for the trimmed video
+    output_directory = './output/' + session['current_video'] + '/videos/'
+
+    # Create the directory if it doesn't exist
+    if not os.path.exists(output_directory):
+        os.makedirs(output_directory)
+
+    # Specify the output file path for the trimmed video using the last_index
+    output_path = os.path.join(output_directory, str(annotation_index) + ".mp4")
+
+    # Write the trimmed video to the output file
+    trimmed_clip.write_videofile(output_path, codec="libx264", fps=24)
+
     try:
-        # Load the existing dataframe from the session
-        df_annotation_json = session.get('df_annotation')
-        if df_annotation_json is None:
-            return jsonify({'error': 'No annotation data available'}), 404
-
-        df_annotation = pd.read_json(df_annotation_json)
-
-        # Locate the row with the specified annotation_id
-        index_to_update = df_annotation[df_annotation['annotationId'] == annotation_id].index
-
-        if not index_to_update.empty:
-            # Update the dataframe with the modified data
-            df_annotation.loc[index_to_update, 'playerName'] = modified_data.get('playerName', '')
-            df_annotation.loc[index_to_update, 'scoreAfter'] = modified_data.get('scoreAfter', '')
-            df_annotation.loc[index_to_update, 'startTime'] = modified_data.get('startTime', '')
-            df_annotation.loc[index_to_update, 'endTime'] = modified_data.get('endTime', '')
-            df_annotation.loc[index_to_update, 'incomingShot'] = modified_data.get('incomingShot', '')
-            df_annotation.loc[index_to_update, 'incomingType'] = modified_data.get('incomingType', '')
-            df_annotation.loc[index_to_update, 'outgoingType'] = modified_data.get('outgoingType', '')
-            df_annotation.loc[index_to_update, 'outgoingShot'] = modified_data.get('outgoingShot', '')
-            df_annotation.loc[index_to_update, 'pointFinish'] = modified_data.get('pointFinish', '')
-            df_annotation.loc[index_to_update, 'position'] = modified_data.get('position', '')
-
-            # Save the updated dataframe back to the session
-            session['df_annotation'] = df_annotation.to_json()
-
-            return jsonify({'message': 'Annotation updated successfully'}), 200
-        else:
-            return jsonify({'error': 'Annotation not found'}), 404
-
+        # Establish a connection to the MySQL database
+        cur = mysql.connection.cursor()
+        cur.execute(update_annotation_query, annotation_data)
+        mysql.connection.commit()  # Commit the transaction
+        cur.close()
     except Exception as e:
-        return jsonify({'error': f'Error updating annotation data: {str(e)}'}), 500
+        # Handle database update errors
+        print("An error occurred while updating the annotation in the database:", e)
+        return jsonify({'error': 'Failed to update annotation in the database'}), 500
+
+    return jsonify({'message': 'Annotation updated successfully'}), 200
 
 
 @app.route('/process_url', methods=['POST'])

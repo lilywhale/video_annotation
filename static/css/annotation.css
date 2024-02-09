@@ -194,6 +194,19 @@ button#slider-start-prev:active, button#slider-end-prev:active {
     margin-left: 0;
     flex-grow: 1;
   }
+  .modify-btn {
+    background-color: #ffea00; /* Bright yellow color */
+    color: #000; /* Black text color */
+    border: none; /* Remove border */
+    padding: 8px 16px; /* Add padding */
+    cursor: pointer; /* Change cursor to pointer on hover */
+    border-radius: 4px; /* Add border radius */
+  }
+  
+  /* Apply hover effect to the modify button */
+  .modify-button:hover {
+    background-color: #ffd600; /* Darker yellow color on hover */
+  }
   
   .form__field {
     min-width: calc(100% - 170px);
@@ -541,5 +554,29 @@ form#videoUploadForm button[type="button"] {
 
 
 
+table {
+  width: 100%;
+  border-collapse: separate;
+  border-spacing: 0 10px;
+  border-radius: 10px;
+  overflow: hidden;
+  background-color: #1da4ec;
+  opacity:80%;
+}
+
+th, td {
+  padding: 15px;
+  text-align: left;
+}
+
+th {
+  background-color: #343a40;
+  color: white;
+}
+
+td {
+  border-top: 1px solid #dee2e6;
+  font-weight: bold;
+}
 
 
