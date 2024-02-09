@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, session, redirect, url_for,send_file, jsonify
-from flask_mysqldb import MySQL
+#from flask_mysqldb import MySQL
 import secrets
 import random
 import os
@@ -25,7 +25,7 @@ app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'passwordsql'
 app.config['MYSQL_DB'] = 'engineering_project'
-mysql = MySQL(app)
+#mysql = MySQL(app)
 
 
 @app.route('/')
