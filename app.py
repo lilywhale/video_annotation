@@ -1,11 +1,11 @@
-from flask import Flask, render_template, request, session, redirect, url_for,send_file, jsonify
+from flask import Flask, render_template, request, session
+from flask import redirect, send_file, jsonify
 from flask_mysqldb import MySQL
 import secrets
 import random
 import os
 import json
 import re
-from io import BytesIO
 from zipfile import ZipFile, ZIP_DEFLATED
 import pathlib
 from moviepy.video.io.VideoFileClip import VideoFileClip
@@ -35,7 +35,6 @@ def home():
 
 @app.route('/create_account', methods=['POST'])
 def create_account():
-    name = request.form['name']
     email = request.form['email']
     password = request.form['password']
 
@@ -43,7 +42,10 @@ def create_account():
     user_id = random.randint(1, 1000)
 
     # Insert the user into the database with the assigned user ID
-    insert_user_query = "INSERT INTO users (idUsers, login, password) VALUES ( %s, %s, %s)"
+    insert_user_query = (
+        "INSERT INTO users (idUsers, login, password) "
+        "VALUES (%s, %s, %s)"
+    )
     user_data = (user_id, email, password)
 
     try:
@@ -72,7 +74,7 @@ def page_not_found(error):
 
 @app.errorhandler(500)
 def internal_server_error(error):
-    return "Internal Server Error. Please try again later.", 500    
+    return "Internal Server Error. Please try again later.", 500
 
 
 @app.route('/login', methods=['POST'])
@@ -82,7 +84,12 @@ def login():
     password = request.form.get('password')
 
     # Query the database to check if the user exists
-    user_query = "SELECT idUsers, login FROM users WHERE login = %s AND password = %s"
+    user_query = (
+        "SELECT idUsers, login "
+        "FROM users "
+        "WHERE login = %s "
+        "AND password = %s"
+    )
     user_data = (email, password)
 
     try:
@@ -101,18 +108,12 @@ def login():
             # Redirect to the 'myvideos.html' route
             return redirect('/myvideos.html')
         else:
-            # If the user does not exist, redirect back to the login page with an error message
+            # If the user does not exist, redirect back to the login page
             return redirect('/')
     except Exception as e:
         # Handle database errors
         print("An error occurred:", e)
         return "An error occurred while logging in. Please try again."
-
-
-
-@app.route('/index.html')
-def index(): 
-    return render_template('index.html')
 
 
 @app.route('/annotation_youtube')
@@ -121,9 +122,13 @@ def annotation():
 
 
 @app.route('/myvideos.html')
-def myvideos(): 
+def myvideos():
     # Liste les fichiers dans le dossier
-    video_files = [f for f in os.listdir("./static/video") if os.path.isfile(os.path.join("./static/video", f))]
+    video_files = [
+        f
+        for f in os.listdir("./static/video")
+        if os.path.isfile(os.path.join("./static/video", f))
+    ]
     print(video_files)
     video_info = []
 
@@ -154,8 +159,11 @@ def get_video_thumbnail(video_path):
     thumbnail = Image.fromarray(frame)
     print(video_path)
     print(os.path.basename(video_path).rsplit('.', 1)[0])
-    #thumbnail_path = 'static/thumbnails/' + video_path.split('/')[3] + '.png'
-    thumbnail_path = os.path.join('static/thumbnails', os.path.basename(video_path).rsplit('.', 1)[0] + '.png')
+    # thumbnail_path = 'static/thumbnails/' + video_path.split('/')[3] + '.png'
+    thumbnail_path = os.path.join(
+        'static/thumbnails',
+        os.path.basename(video_path).rsplit('.', 1)[0] + '.png'
+    )
     thumbnail_path = thumbnail_path.replace('\\', '/')
     print(thumbnail_path)
     thumbnail.save(thumbnail_path)
@@ -163,7 +171,10 @@ def get_video_thumbnail(video_path):
 
 
 def allowed_file(filename):
-    return '.' in filename and filename.rsplit('.',1)[1].lower() in ALLOWED_EXTENSIONS
+    return (
+        '.' in filename
+        and filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+    )
 
 
 @app.route('/upload_video', methods=['POST'])
@@ -187,19 +198,6 @@ def stream_video():
     return send_file(video_path, mimetype='video/mp4', as_attachment=True)
 
 
-@app.route('/delete_video/<video_name>')
-def delete_video(video_name):
-    video_path = os.path.join("static/video", video_name)
-    thumbnail_path = os.path.join("static/thumbnails", video_name.replace('.mp4', '.png'))
-
-    try:
-        os.remove(video_path)
-        os.remove(thumbnail_path)
-        return "Video and thumbnail deleted successfully."
-    except Exception as e:
-        return f"Error deleting video: {str(e)}"
-
-
 @app.route('/annotate_video/<video_name>')
 def annotate_video(video_name):
     session['current_video'] = video_name
@@ -216,12 +214,7 @@ def sanitize_title(title):
 
 @app.route('/upload_video_desktop_app', methods=['POST'])
 def upload_video_desktop_app():
-    """# Get the uploaded file from the request
-    video_file = request.files['videoFile']
-    video_file.save("static/video/" + video_file.filename)
-    # video_file.save("static/video/" + video_file.filename.split(".")[0] + "/" + video_file.filename)
-    session['current_video'] = video_file.filename
-    """
+
     video_file = request.files['videoFile']
     filename = sanitize_title(video_file.filename)
     video_file.save("static/video/" + filename)
@@ -231,8 +224,15 @@ def upload_video_desktop_app():
     print("Uploaded Video File Name:", filename)
 
     script_path = 'upload_video/upload_video_desktop_app.py'
-    os.system(f'python {script_path} --file="static/video/{filename}" --title="{filename}" --description="Test to upload a video on youtube"  --keywords="python, programming" --category="28"  --privacyStatus="unlisted"')
-
+    os.system(
+        f'python {script_path} '
+        f'--file="static/video/{filename}" '
+        f'--title="{filename}" '
+        f'--description="Test to upload a video on youtube" '
+        f'--keywords="python, programming" '
+        f'--category="28" '
+        f'--privacyStatus="unlisted"'
+    )
     return 'Video uploaded successfully!'
 
 
@@ -279,7 +279,10 @@ def submit_annotation():
         "pointFinish": point_finish,
         "position": position
     }
-    df_annotation = pd.concat([df_annotation, pd.DataFrame([new_row])], ignore_index=True)
+    df_annotation = pd.concat(
+        [df_annotation, pd.DataFrame([new_row])],
+        ignore_index=True
+    )
 
     if len(df_annotation) == 1:
         last_index = 0
@@ -294,7 +297,7 @@ def submit_annotation():
     video_path = "static/video/" + session['current_video']
     clip = VideoFileClip(video_path)
 
-    # Trim the video 
+    # Trim the video
     trimmed_clip = clip.subclip(start_time, end_time)
 
     # Specify the output file path for the trimmed video
@@ -318,14 +321,17 @@ def submit_annotation():
     # Insert the new annotation into the database
     insert_annotation_query = """
         INSERT INTO annotations (
-            annotationIndex, playerName, scoreAfter, startTime, endTime, incomingShot, 
-            incomingType, outgoingType, outgoingShot, pointFinish, position, videoPath, idUsers
-        ) VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            annotationIndex, playerName, scoreAfter, startTime, endTime,
+            incomingShot,incomingType, outgoingType, outgoingShot, pointFinish,
+            position, videoPath, idUsers)
+        VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
     """
     annotation_data = (
-        new_row['index'], new_row['playerName'], new_row['scoreAfter'], new_row['startTime'],
-        new_row['endTime'], new_row['incomingShot'], new_row['incomingType'], new_row['outgoingType'],
-        new_row['outgoingShot'], new_row['pointFinish'], new_row['position'], new_row['videoPath'], user_id
+        new_row['index'], new_row['playerName'], new_row['scoreAfter'],
+        new_row['startTime'], new_row['endTime'], new_row['incomingShot'],
+        new_row['incomingType'], new_row['outgoingType'],
+        new_row['outgoingShot'], new_row['pointFinish'], new_row['position'],
+        new_row['videoPath'], user_id
     )
 
     try:
@@ -336,7 +342,7 @@ def submit_annotation():
         cur.close()
     except Exception as e:
         # Handle database insertion errors
-        print("An error occurred while inserting the annotation into the database:", e)
+        print("An error occurred while inserting the annotation:", e)
 
     return jsonify({'message': 'Annotation enregistrée'}), 200
 
@@ -364,7 +370,6 @@ def update_annotation(annotation_index):
     df_annotation = pd.read_json(df_annotation_json)
 
     # Find the row in the DataFrame with the specified annotation_id
-    #row_to_update = df_annotation[df_annotation['index'] == annotation_index].iloc[0]
     video_path = "static/video/" + session['current_video']
 
     # Get data from the form
@@ -396,18 +401,20 @@ def update_annotation(annotation_index):
 
     # Update the corresponding row in the database
     update_annotation_query = """
-        UPDATE annotations SET playerName=%s, scoreAfter=%s, startTime=%s, endTime=%s, incomingShot=%s,
-        incomingType=%s, outgoingType=%s, outgoingShot=%s, pointFinish=%s, position=%s
+        UPDATE annotations SET playerName=%s, scoreAfter=%s, startTime=%s,
+        endTime=%s, incomingShot=%s, incomingType=%s, outgoingType=%s,
+        outgoingShot=%s, pointFinish=%s, position=%s
         WHERE annotationIndex=%s AND videoPath=%s
     """
     annotation_data = (
-        player_name, score_after, start_time, end_time, incoming_shot, incoming_type, outgoing_type,
-        outgoing_shot, point_finish, position, annotation_index, video_path
+        player_name, score_after, start_time, end_time, incoming_shot,
+        incoming_type, outgoing_type, outgoing_shot, point_finish,
+        position, annotation_index, video_path
     )
 
     clip = VideoFileClip(video_path)
 
-    # Trim the video 
+    # Trim the video
     trimmed_clip = clip.subclip(start_time, end_time)
 
     # Specify the output file path for the trimmed video
@@ -418,7 +425,10 @@ def update_annotation(annotation_index):
         os.makedirs(output_directory)
 
     # Specify the output file path for the trimmed video using the last_index
-    output_path = os.path.join(output_directory, str(annotation_index) + ".mp4")
+    output_path = os.path.join(
+        output_directory,
+        str(annotation_index) + ".mp4"
+    )
 
     # Write the trimmed video to the output file
     trimmed_clip.write_videofile(output_path, codec="libx264", fps=24)
@@ -431,8 +441,8 @@ def update_annotation(annotation_index):
         cur.close()
     except Exception as e:
         # Handle database update errors
-        print("An error occurred while updating the annotation in the database:", e)
-        return jsonify({'error': 'Failed to update annotation in the database'}), 500
+        print("An error occurred while updating the annotation:", e)
+        return jsonify({'error': 'Failed to update the database'}), 500
 
     return jsonify({'message': 'Annotation updated successfully'}), 200
 
@@ -445,7 +455,7 @@ def process_url():
         video_url = request.form['url']
 
         yt = YouTube(video_url)
-        filename = sanitize_title(yt.title) + '.mp4'  # Sanitize the title and add .mp4 extension
+        filename = sanitize_title(yt.title) + '.mp4'  # Sanitize the title
         session.pop('df_annotation', None)
         # Get the list of files in the directory
         video_files = os.listdir("static/video")
@@ -460,11 +470,11 @@ def process_url():
             # Download the stream to a file
             stream.download(output_path="static/video/", filename=filename)
 
-            session['current_video'] = filename 
+            session['current_video'] = filename
             print(session['current_video'])
             print("video downloaded")
         else:
-            session['current_video'] = filename 
+            session['current_video'] = filename
             print(session['current_video'])
             print("video already here")
 
@@ -476,7 +486,9 @@ def download_data():
 
     df_annotation_json = session.get('df_annotation')
     df_annotation = pd.read_json(df_annotation_json)
-    output_directory = './output/' + session['current_video'] + '/annotations.csv'
+    output_directory = './output/' + \
+        session['current_video'] + \
+        '/annotations.csv'
     df_annotation.to_csv(output_directory)
 
     directory_to_zip = './output/' + session['current_video']
@@ -503,4 +515,4 @@ def download_data():
 
 
 if __name__ == '__main__':
-    app.run(port=3000, debug=True)
+    app.run(debug=True)

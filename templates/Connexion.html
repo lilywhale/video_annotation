@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -9,56 +6,8 @@
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <title>TennisInsight.com</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.min.css') }}">
-  <style>
-      body {
-          font-family: 'Arial', sans-serif;
-          background-color: #ffffff;
-          margin: 0;
-          padding: 0;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: 100vh;
-      }
-
-      .container {
-          background-color: rgba(141, 141, 141, 0.397);
-          padding: 30px;
-          border-radius: 10px;
-          box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-          width: 350px; /* Increased width for better spacing */
-          margin: 0 10px;
-          text-align: center;
-      }
-
-      h1 {
-          margin-bottom: 30px;
-      }
-
-      input {
-          width: 100%;
-          padding: 10px;
-          margin-bottom: 15px;
-          border: none;
-          border-radius: 5px;
-          text-align: center; /* Center text within input */
-      }
-
-      .btn {
-          background-color: #ffffff;
-          color: #1e7e34;
-          padding: 10px 20px;
-          border: none;
-          border-radius: 5px;
-          cursor: pointer;
-          font-weight: bold;
-      }
-
-      .btn:hover {
-          background-color: #3a99f1;
-      }
-  </style>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/connexion.css') }}">
+ 
 </head>
 <body>
   <div class="container">
@@ -75,8 +24,6 @@
   <div class="container">
       <h1>Sign up</h1>
       <form method="POST" action="{{ url_for('create_account') }}">
-          <input type="text" class="form-control" placeholder="Full Name" name="name" required>
-          <br>
           <input type="email" class="form-control" placeholder="Email" name="email" required>
           <br>
           <input type="password" class="form-control" placeholder="Password" name="password" required>
@@ -85,65 +32,5 @@
       </form>
   </div>
 
-<!--<section id="reservation" class="bg-white section-content">
-    <div class="container">
-        <div class="row justify-content-center">
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-header">
-                <h3>Login</h3>
-              </div>
-              <div class="card-body">
-                <form method="POST" action="{{ url_for('login') }}">
-                  <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Login</button>
-                </form>
-              </div>
-            </div>
-          </div>
-
-       
-          <div class="col-lg-6">
-            <div class="card">
-              <div class="card-header">
-                <h3>Create Account</h3>
-              </div>
-              <div class="card-body">
-                <form method="POST" action="{{ url_for('create_account') }}">
-                  <div class="form-group">
-                    <label for="name">Full Name</label>
-                    <input type="text" class="form-control" id="name" name="name" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="email">Email</label>
-                    <input type="email" class="form-control" id="email" name="email" required>
-                  </div>
-                  <div class="form-group">
-                    <label for="password">Password</label>
-                    <input type="password" class="form-control" id="password" name="password" required>
-                  </div>
-                  <button type="submit" class="btn btn-primary">Create Account</button>
-                </form>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-  </section>
- -->
-
-<!-- External JS -->
-
-<script src="{{ url_for('static', filename='js/connexion.js') }}"></script>
-
-
-<script src="{{ url_for('static', filename='js/app.min.js') }}"></script>
 </body>
 </html>

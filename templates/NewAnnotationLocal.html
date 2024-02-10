@@ -120,7 +120,6 @@
     <div class="info">
     </div>
     <div class="wrap">
-      <!-- <input id="range-slider" type="text" name="range" value="" /> -->
 
       <div class="player-controls">
         
@@ -175,145 +174,15 @@
     </tbody>
   </table>
 
-  <!-- (Modification)  -->
+  <!-- (Modification)  
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        var annotationForm = document.querySelector('form[action="/submit_annotation"]');
-        var isModify = false;
-        index = 0;
-        console.log(isModify)
-
-        annotationForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-            annotationIndex = event.target.dataset.index;
-            console.log("annotation index")
-            console.log(annotationIndex)
-            console.log("index")
-            console.log(index)
-            var formData = new FormData(annotationForm);
-            var url = isModify ? '/update_annotation/' + index : '/submit_annotation';
-            console.log(url)
-
-            // Send AJAX request to Flask server
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', url, true);
-            xhr.onload = function () {
-                if (xhr.status == 200) {
-                    Swal.fire({
-                        title: 'Annotation enregistrée',
-                        icon: 'success',
-                        showConfirmButton: false,
-                        timer: 2000  // 2 seconds
-                    }).then(function () {
-                        annotationForm.reset();
-                        isModify = false;
-                        console.log(isModify)
-
-                        // Fetch annotations after form submission
-                        fetchAnnotations();
-                    });
-                }
-            };
-            xhr.send(formData);
-        });
-
-        // Function to fetch annotations from the server
-        function fetchAnnotations() {
-            var xhrAnnotations = new XMLHttpRequest();
-            xhrAnnotations.open('GET', '/get_annotations', true);
-            xhrAnnotations.onload = function () {
-                if (xhrAnnotations.status == 200) {
-                    var annotationData = JSON.parse(xhrAnnotations.responseText);
-                    updateTable(annotationData);
-                }
-            };
-            xhrAnnotations.send();
-        }
-
-        // Function to update HTML table with new data
-        function updateTable(annotationData) {
-          var tableBody = document.querySelector('tbody');
-          tableBody.innerHTML = '';
-
-          // Rebuild table rows with new data
-          annotationData.forEach(function (annotation, index) {
-            var row = '<tr>';
-            row += '<td>' + index + '</td>'; // Add the index
-            row += '<td>' + annotation.playerName + '</td>';
-            row += '<td>' + annotation.scoreAfter + '</td>';
-            row += '<td>' + annotation.startTime + '</td>';
-            row += '<td>' + annotation.endTime + '</td>';
-            row += '<td>' + annotation.incomingShot + '</td>';
-            row += '<td>' + annotation.incomingType + '</td>';
-            row += '<td>' + annotation.outgoingType + '</td>';
-            row += '<td>' + annotation.outgoingShot + '</td>';
-            row += '<td>' + annotation.pointFinish + '</td>';
-            row += '<td>' + annotation.position + '</td>';
-            row += '<td><button class="btn btn-primary modify-btn" data-index="' + index + '">Modify</button></td>';
-            row += '</tr>';
-            tableBody.innerHTML += row;
-    });
-
-    // Add event listeners to the buttons
-    var modifyButtons = document.querySelectorAll('.modify-btn');
     
-
-    modifyButtons.forEach(function(button) {
-        button.addEventListener('click', function(event) {
-            isModify = true;
-            console.log(isModify)
-            index = event.target.dataset.index;
-            console.log(index)
-            // Get data of the row that triggered the update route
-            var rowData = annotationData[index];
-            // Call a function to populate the form with rowData
-            populateForm(rowData);
-        });
-    });
-
-}
-
-// Function to populate the form with row data
-function populateForm(rowData) {
-    // Get form elements
-    var playerNameInput = document.getElementById('playerName');
-    var scoreAfterInput = document.getElementById('scoreAfter');
-    var startTimeInput = document.getElementById('startTime');
-    var endTimeInput = document.getElementById('endTime');
-    var incomingShotSelect = document.getElementById('incomingShot');
-    var incomingTypeSelect = document.getElementById('incomingType');
-    var outgoingTypeSelect = document.getElementById('outgoingType');
-    var outgoingShotSelect = document.getElementById('outgoingShot');
-    var pointFinishSelect = document.getElementById('pointFinish');
-    var positionSelect = document.getElementById('position');
-
-    // Populate form with rowData
-    playerNameInput.value = rowData.playerName;
-    scoreAfterInput.value = rowData.scoreAfter;
-    startTimeInput.value = rowData.startTime;
-    endTimeInput.value = rowData.endTime;
-    incomingShotSelect.value = rowData.incomingShot;
-    incomingTypeSelect.value = rowData.incomingType;
-    outgoingTypeSelect.value = rowData.outgoingType;
-    outgoingShotSelect.value = rowData.outgoingShot;
-    pointFinishSelect.value = rowData.pointFinish;
-    positionSelect.value = rowData.position;
-    window.scrollTo({
-        top: 0,
-        behavior: 'smooth'
-    });
-}
-
-        // Fetch annotations when the page loads
-        fetchAnnotations();
-    });
-</script>
+  </script>-->
   
 
 <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/ion-rangeslider/2.3.0/js/ion.rangeSlider.min.js'></script>
 <script type="text/javascript" src='https://cdn.jsdelivr.net/npm/sweetalert2@11'></script>
-<!--<script src="{{ url_for('static', filename='js/annotation.js') }}"></script>-->
 <script src="{{ url_for('static', filename='js/local_video_script.js') }}"></script>
 </body>
 </html>
