@@ -25,7 +25,7 @@ app.config['MYSQL_HOST'] = 'localhost'
 app.config['MYSQL_USER'] = 'root'
 app.config['MYSQL_PASSWORD'] = 'passwordsql'
 app.config['MYSQL_DB'] = 'engineering_project'
-#mysql = MySQL(app)
+mysql = MySQL(app)
 
 
 @app.route('/')
